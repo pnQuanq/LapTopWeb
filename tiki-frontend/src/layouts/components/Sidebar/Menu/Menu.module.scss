@@ -1,0 +1,27 @@
+.menu-item{
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    margin: 0 6px;
+    border-radius: 8px;
+    text-decoration: none;
+    cursor: pointer;
+    &:hover{
+        cursor: pointer;
+        background-color: aqua;
+    }
+}
+
+.title{
+    margin-left: 10px;
+    font-size: 14px;
+    font-weight: 550;
+    color: #000;
+}
+
+p{
+    margin: 10px;
+    font-size: 16px;
+    font-weight: 800;
+    color: #000;
+}

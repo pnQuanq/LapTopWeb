@@ -1,0 +1,152 @@
+.wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+    height: 80px;
+    background-color: #fff;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.12);
+
+}
+
+.inner{
+    display: flex;
+    align-items: center;
+
+    height: 100%;
+    width: 90%;
+
+}
+
+.logo{
+    display: flex;
+    flex: 1;
+    align-items: center;
+    margin-right: 12px;
+    &:hover{
+        cursor: pointer;
+    }
+}
+.search{
+    display: flex;
+    flex: 10;
+    align-items: center;
+    justify-self: center;
+    width: fit-content;
+    height: 45px;
+    padding-left: 16px;
+    margin-right: 32px;
+    border:#dddde3 1px solid;
+    border-radius: 92px;
+
+    input{
+        flex: 1;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.8rem;
+        color: #000;
+        border: none;
+        height: 100%;
+        background-color: transparent;
+        outline: none;
+    }
+    &:focus-within{
+        border: 1px solid var(--primary);
+    }
+}
+
+.actions{
+    display: flex;
+    flex: 3;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    font-size: 1.8rem ;
+    height: 100%;
+
+    .user{
+        display: flex;
+        flex: 1;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        height: 80%;
+        padding: 0 12px;
+        border-radius: 12px;
+        color: #000;
+        &:hover{
+            cursor: pointer;
+            background-color: aqua;
+        }
+        div{
+            font-size: 16px;
+            font-weight: 600;
+        }
+    }
+    
+    .cart{
+        display: flex;
+        flex: 1;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        margin-left: 2px;
+        height: 80%;
+        padding: 0 12px;
+        border-radius: 12px;
+        color: #000;
+        &:hover{
+            cursor: pointer;
+            background-color: aqua;
+        }
+        div{
+            font-size: 16px;
+            font-weight: 600;
+        }
+    }
+}
+
+
+.search-btn{
+    width: 50px;
+    height: 100%;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    border-radius: 0 18px 18px 0;
+
+    &:hover{
+        cursor: pointer;
+        background-color: #dddde3;
+    }
+
+}
+
+.account-tooltip{
+    position: relative;
+    background-color: #fff;
+    box-shadow: 4px 8px 8px rgba(0,0,0,0.5);
+    width: 150px;
+    padding: 4px;
+    border-radius: 4px;
+    margin-top: 8px;
+    p{
+        margin: 0;
+    }
+
+    .item{
+        display: flex;
+        width: 100%;
+        height: 40px;
+        border-radius: 4px;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        &:hover{
+            background-color: aqua;
+        }
+    }
+}
