@@ -8,18 +8,9 @@ const cx = classNames.bind(styles);
 
 const CardItem = ({ props }) => {
   const navigate = useNavigate();
-  const handleDetail = () => {
-    navigate("/productdetail", {
-      replace: false,
-      state: {
-        id: props.id,
-        name: props.name,
-        rating: props.rating,
-        price: props.price,
-        image: props.image,
-        description: props.description,
-      },
-    });
+
+  const handleDetailProduct = (id) => {
+    navigate(`/productdetail/${id}`);
   };
 
   const renderRate = () => {
@@ -31,8 +22,12 @@ const CardItem = ({ props }) => {
   };
 
   return (
-    <div className={cx("wrapper")} onClick={handleDetail}>
-      <div key={props.id} className={cx("image")}>
+    <div className={cx("wrapper")}>
+      <div
+        key={props._id}
+        className={cx("image")}
+        onClick={() => handleDetailProduct(props._id)}
+      >
         <img
           src={props.image}
           alt="img"

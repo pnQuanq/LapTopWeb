@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import styles from "./Laptop.module.scss";
 import classNames from "classnames/bind";
@@ -15,39 +15,54 @@ import Data from "../../Data/Data";
 const cx = classNames.bind(styles);
 
 const Laptop = () => {
+  const [PData, setPData] = useState([]);
+
   const fetchProductAll = async () => {
-    const res = await ProductService.getAllProduct();
-    console.log("res", res);
-    return res;
+    try {
+      const res = await ProductService.getAllProduct();
+      console.log("Data fetched:", res);
+      return res;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
-  const { isLoading, data: products } = useQuery({
-    queryKey: ["products"],
-    queryFn: fetchProductAll,
-    retry: 3,
-    retryDelay: 1000,
-  });
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await fetchProductAll();
+        setPData(result.data);
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
 
-  console.log("data", products);
+    fetchData();
+    console.log("PData:", PData);
+  }, []);
 
-  //const Data = [products.data];
+  useEffect(() => {
+    console.log("Rerendered!");
+  }, [PData]);
 
-  const NormalLaptopASUS = Data.filter((index) => {
+  console.log("data products: ", PData);
+
+  const NormalLaptopASUS = PData.filter((index) => {
     return index.type === "normal-laptop" && index.company === "ASUS";
   });
 
-  const NormalLaptopACER = Data.filter((index) => {
+  const NormalLaptopACER = PData.filter((index) => {
     return index.type === "normal-laptop" && index.company === "ACER";
   });
 
-  const NormalLaptopLENOVO = Data.filter((index) => {
+  const NormalLaptopLENOVO = PData.filter((index) => {
     return index.type === "normal-laptop" && index.company === "LENOVO";
   });
 
-  const NormalLaptopMSI = Data.filter((index) => {
+  const NormalLaptopMSI = PData.filter((index) => {
     return index.type === "normal-laptop" && index.company === "MSI";
   });
 
-  const NormalLaptopDELL = Data.filter((index) => {
+  const NormalLaptopDELL = PData.filter((index) => {
     return index.type === "normal-laptop" && index.company === "DELL";
   });
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import styles from "./ProductDetail.module.scss";
 import classNames from "classnames/bind";
@@ -9,44 +9,66 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
-
 import CardItem from "../../components/CardItem/CardItem";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
+import * as ProductService from "../../services/ProductService";
 import Data from "../../Data/Data";
-
-import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { addOrderProduct } from "../../redux/slide/orderSlide";
 
 const cx = classNames.bind(styles);
-const ProductDetail = (props) => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const [quantity, setQuantity] = useState(1);
 
-  const id = location.state.id;
-  const name = location.state.name;
-  const price = location.state.price;
-  const srcimage = location.state.image;
+const ProductDetail = () => {
+  const [quantity, setQuantity] = useState(1);
+  const [detailProduct, setDetailProduct] = useState({});
+  const user = useSelector((state) => state.user);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const { id } = useParams();
+
   const handleDown = () => {
     if (quantity > 1) {
       setQuantity(quantity - 1);
     }
   };
-
   const handleUp = () => {
     setQuantity(quantity + 1);
   };
 
+  const fetchGetDetailsProduct = async (id) => {
+    try {
+      const res = await ProductService.getDetailsProduct(id);
+      if (res?.data) {
+        setDetailProduct(res.data);
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+  useEffect(() => {
+    if (id) {
+      fetchGetDetailsProduct(id);
+    }
+  }, [id]);
+
   const handleBuy = () => {
-    navigate("/cart", {
-      replace: false,
-      state: {
-        id: id,
-        name: name,
-        price: price,
-        image: srcimage,
-        option: props.option,
-        quantity: quantity,
-      },
-    });
+    if (!user?.id) {
+      navigate("/login", { state: location.pathname });
+    } else {
+      dispatch(
+        addOrderProduct({
+          orderItem: {
+            product: detailProduct._id,
+            name: detailProduct.name,
+            image: detailProduct.image,
+            price: detailProduct.price,
+            amount: quantity,
+          },
+        })
+      );
+      alert("Đã thêm vào giỏ hàng");
+    }
   };
 
   return (
@@ -54,7 +76,7 @@ const ProductDetail = (props) => {
       <div className={cx("container-content")}>
         <div className={cx("container-image")}>
           <div className={cx("image")}>
-            <img src={srcimage} alt="linkien" />
+            <img src={detailProduct.image} alt="linkien" />
           </div>
           <div className={cx("list-image")}>
             <img src={linkien} alt="linkien" />
@@ -67,7 +89,7 @@ const ProductDetail = (props) => {
         <div className={cx("container-info")}>
           <div className={cx("base-info")}>
             <div className={cx("name")}>
-              <p>{name}</p>
+              <p>{detailProduct.name}</p>
             </div>
             <div className={cx("rate")}>
               <p style={{ display: "flex", alignItems: "center" }}>
@@ -83,7 +105,7 @@ const ProductDetail = (props) => {
               </p>
             </div>
             <div className={cx("price")}>
-              <p>{price}</p>
+              <p>{detailProduct.price}</p>
             </div>
           </div>
           <div className={cx("option-info")}>
@@ -129,7 +151,7 @@ const ProductDetail = (props) => {
       <div className={cx("container-description")}>
         <p style={{ fontSize: "18px" }}>Mô tả sản phẩm</p>
         <div className={cx("description")}>
-          <p>{location.state.description}</p>
+          <p>{detailProduct.description}</p>
         </div>
       </div>
 

@@ -10,7 +10,7 @@ const routes = {
   manhinh: "/manhinh",
   tainghevloa: "/tainghevloa",
   phukien: "/phukien",
-  productdetail: "/productdetail",
+  productdetail: "/productdetail/:id",
   login: "/login",
   register: "/register",
   profile: "/profile",

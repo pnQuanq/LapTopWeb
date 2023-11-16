@@ -91,6 +91,7 @@ const routes = [
   {
     path: config.routes.productdetail,
     component: ProductDetail,
+
     layout: HeaderOnly,
   },
 

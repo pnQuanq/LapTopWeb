@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./Login.module.scss";
 import classNames from "classnames/bind";
 import { AiOutlineMail, AiOutlineLock } from "react-icons/ai";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import * as UserService from "../../services/UserService";
 import { useMutationHook } from "../../hooks/useMutationHook";
 import jwt_decode from "jwt-decode";
@@ -21,7 +21,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
-
+  const location = useLocation();
   const dispatch = useDispatch();
 
   const handleFocusEmail = () => {
@@ -58,8 +58,13 @@ const Login = () => {
 
   useEffect(() => {
     if (isSuccess && mutation.data.status === "OK") {
-      console.log(mutation.data.status);
-      navigate("/");
+      if (location?.state) {
+        alert("Đăng nhập thành công");
+        navigate(location.state);
+      } else {
+        alert("Đăng nhập thành công");
+        navigate("/");
+      }
       localStorage.setItem(
         "access_token",
         JSON.stringify(mutation.data?.access_token)

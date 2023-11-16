@@ -7,98 +7,15 @@ import * as AiIcons from "react-icons/ai";
 import { getBase64 } from "../../../../utils";
 import { Modal, Table } from "antd";
 import { Upload } from "antd";
+import useSelection from "antd/es/table/hooks/useSelection";
 
 const cx = classNames.bind(styles);
 
-const columns = [
-  {
-    title: "Image",
-    dataIndex: "image",
-    render: (image) => <img src={image} width={150} alt="Uploaded Image" />,
-  },
-  {
-    title: "Name",
-    dataIndex: "name",
-    render: (text) => <p style={{ fontWeight: "550" }}>{text}</p>,
-  },
-  {
-    title: "Type",
-    dataIndex: "type",
-  },
-  {
-    title: "Company",
-    dataIndex: "company",
-  },
-  {
-    title: "Price",
-    dataIndex: "price",
-  },
-  {
-    title: "CountInStock",
-    dataIndex: "countInStock",
-  },
-  {
-    title: "Rating",
-    dataIndex: "rating",
-  },
-  {
-    title: "Description",
-    dataIndex: "description",
-  },
-  {
-    title: "Action",
-    render: () => (
-      <div>
-        <AiIcons.AiFillDelete className={cx("AiIcons")} color="red" />
-        <AiIcons.AiFillEdit className={cx("AiIcons")} color="#F0E68C" />
-      </div>
-    ),
-  },
-];
-const listType = [
-  {
-    id: 1,
-    name: "normal-laptop",
-  },
-  {
-    id: 2,
-    name: "gaming-laptop",
-  },
-  {
-    id: 3,
-    name: "normal-PC",
-  },
-  {
-    id: 3,
-    name: "gaming-PC",
-  },
-];
-const listCompany = [
-  {
-    id: 1,
-    name: "Asus",
-  },
-  {
-    id: 2,
-    name: "Lenovo",
-  },
-  {
-    id: 3,
-    name: "MSI",
-  },
-  {
-    id: 3,
-    name: "DELL",
-  },
-  {
-    id: 3,
-    name: "ACER",
-  },
-];
-
 const Product = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpenAddProduct, setIsModalOpenAddProduct] = useState(false);
+  const [rowSelected, setRowSelected] = useState("");
+  const [isModalOpenEditProduct, setIsModalOpenEditProduct] = useState(false);
   const [isDropdownType, setIsDropdownType] = useState(false);
   const [isDropdownCompany, setIsDropdownCompany] = useState(false);
   const [Data, setData] = useState([]);
@@ -113,12 +30,126 @@ const Product = () => {
     image: "",
   });
 
+  const [stateProductDetails, setStateProductDetails] = useState({
+    name: "",
+    type: "",
+    company: "",
+    price: "",
+    countInStock: "",
+    rating: "",
+    description: "",
+    image: "",
+  });
+
   const mutation = useMutationHook((data) =>
     ProductService.createProduct(data)
   );
+  const user = useSelection((state) => state?.user);
+  const mutationUpdate = useMutationHook((data) => {
+    const { id, token, ...rests } = data;
+    const res = ProductService.updateProduct(id, token, { ...rests });
+    return res;
+  });
+  const columns = [
+    {
+      title: "Image",
+      dataIndex: "image",
+      render: (image) => <img src={image} width={150} alt="Uploaded Image" />,
+    },
+    {
+      title: "Name",
+      dataIndex: "name",
+      render: (text) => <p style={{ fontWeight: "550" }}>{text}</p>,
+    },
+    {
+      title: "Type",
+      dataIndex: "type",
+    },
+    {
+      title: "Company",
+      dataIndex: "company",
+    },
+    {
+      title: "Price",
+      dataIndex: "price",
+    },
+    {
+      title: "CountInStock",
+      dataIndex: "countInStock",
+    },
+    {
+      title: "Rating",
+      dataIndex: "rating",
+    },
+    {
+      title: "Description",
+      dataIndex: "description",
+    },
+    {
+      title: "Action",
+      render: () => (
+        <div>
+          <AiIcons.AiFillDelete className={cx("AiIcons")} color="red" />
+          <AiIcons.AiFillEdit
+            className={cx("AiIcons")}
+            color="#F0E68C"
+            onClick={() => {
+              handleDetailProduct();
+            }}
+          />
+        </div>
+      ),
+    },
+  ];
+  const listType = [
+    {
+      id: 1,
+      name: "normal-laptop",
+    },
+    {
+      id: 2,
+      name: "gaming-laptop",
+    },
+    {
+      id: 3,
+      name: "normal-PC",
+    },
+    {
+      id: 3,
+      name: "gaming-PC",
+    },
+  ];
+  const listCompany = [
+    {
+      id: 1,
+      name: "Asus",
+    },
+    {
+      id: 2,
+      name: "Lenovo",
+    },
+    {
+      id: 3,
+      name: "MSI",
+    },
+    {
+      id: 3,
+      name: "DELL",
+    },
+    {
+      id: 3,
+      name: "ACER",
+    },
+  ];
 
   const { isError, isSuccess } = mutation;
-
+  const {
+    data: dataUpdated,
+    isLoading: isLoadingUpdated,
+    isSuccess: isSuccessUpdated,
+    isError: isErrorUpdated,
+  } = mutationUpdate;
+  // add product
   useEffect(() => {
     if (isSuccess && mutation.data.status === "OK") {
       alert("Thêm sản phẩm thành công");
@@ -133,15 +164,17 @@ const Product = () => {
     }
   }, [isSuccess, isError]);
 
+  //Fetch ALL data
   const fetchProductAll = async () => {
     try {
       const res = await ProductService.getAllProduct();
-      console.log("Data fetched:", res);
+      console.log("Data fetched all product:", res);
       return res;
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -156,6 +189,27 @@ const Product = () => {
     console.log("Data:", Data);
   }, []);
 
+  // const fecthGetProductDetail = async (rowSelected) => {
+  //   try {
+  //     const res = await ProductService.getDetailsProduct(rowSelected);
+  //     if (res.data.status === "OK") {
+  //       setStateProductDetails({
+  //         name: res?.data?.name,
+  //         type: res?.data?.type,
+  //         company: res?.data?.company,
+  //         price: res?.data?.price,
+  //         countInStock: res?.data?.countInStock,
+  //         rating: res?.data?.rating,
+  //         description: res?.data?.description,
+  //         image: res?.data?.image,
+  //       });
+  //       console.log("RES StateProductDetails:", res);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
+
   const onSelectChange = (newSelectedRowKeys) => {
     console.log("selectedRowKeys changed: ", newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
@@ -165,15 +219,14 @@ const Product = () => {
     onChange: onSelectChange,
   };
 
-  const handleOk = () => {
+  //Add product
+  const handleOkAddProduct = () => {
     mutation.mutate(stateProduct);
     console.log("stateProduct", stateProduct);
-    setIsModalOpen(false);
+    setIsModalOpenAddProduct(false);
   };
-
-  //mutation.mutate(stateProduct);
-  const handleCancel = () => {
-    setIsModalOpen(false);
+  const handleCancelAddProduct = () => {
+    setIsModalOpenAddProduct(false);
   };
   const handleOnChange = (event) => {
     setStateProduct({
@@ -192,13 +245,95 @@ const Product = () => {
     });
   };
 
+  //Edit product
+
+  const handleDetailProduct = () => {
+    fetchGetDetailsProduct();
+    setIsModalOpenEditProduct(true);
+  };
+
+  const fetchGetDetailsProduct = async (rowSelected) => {
+    try {
+      const res = await ProductService.getDetailsProduct(rowSelected);
+      if (res?.data) {
+        setStateProductDetails({
+          name: res?.data?.name,
+          type: res?.data?.type,
+          company: res?.data?.company,
+          price: res?.data?.price,
+          countInStock: res?.data?.countInStock,
+          rating: res?.data?.rating,
+          description: res?.data?.description,
+          image: res?.data?.image,
+        });
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+  useEffect(() => {
+    if (rowSelected) {
+      fetchGetDetailsProduct(rowSelected);
+    }
+  }, [rowSelected]);
+
+  const handleOkEditProduct = () => {
+    mutationUpdate.mutate({
+      id: rowSelected,
+      token: user?.accessToken,
+      ...stateProductDetails,
+    });
+    if (isSuccessUpdated) {
+      alert("Cập nhật thành công");
+      setIsModalOpenEditProduct(false);
+    } else if (isErrorUpdated) {
+      alert("Cập nhật thất bại");
+      //setIsModalOpenEditProduct(false);
+    }
+    //setIsModalOpenEditProduct(false);
+    //window.location.reload();
+  };
+  const handleCancelEditProduct = () => {
+    setStateProductDetails({
+      name: "",
+      type: "",
+      company: "",
+      price: "",
+      countInStock: "",
+      rating: "",
+      description: "",
+      image: "",
+    });
+    setIsModalOpenEditProduct(false);
+  };
+  const handleOnChangeDetails = (event) => {
+    setStateProductDetails({
+      ...stateProductDetails,
+      [event.target.name]: event.target.value,
+    });
+  };
+  const handleOnChangeImageDetails = async ({ fileList }) => {
+    try {
+      const file = fileList[0];
+      if (!file.url && !file.preview) {
+        file.preview = await getBase64(file.originFileObj);
+      }
+      setStateProductDetails({
+        ...stateProductDetails,
+        image: file.preview,
+      });
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   return (
     <div className={cx("container")}>
       <p>Quản lí sản phẩm</p>
       <div
         className={cx("add")}
         onClick={() => {
-          setIsModalOpen(true);
+          setIsModalOpenAddProduct(true);
         }}
       >
         +
@@ -208,20 +343,33 @@ const Product = () => {
           rowSelection={rowSelection}
           columns={columns}
           dataSource={Data}
+          onRow={(record, rowIndex) => {
+            return {
+              onClick: (event) => {
+                setRowSelected(record._id);
+              },
+            };
+          }}
         />
       </div>
       <Modal
         title="Basic Modal"
-        open={isModalOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
+        open={isModalOpenAddProduct}
+        onOk={handleOkAddProduct}
+        onCancel={handleCancelAddProduct}
         footer={[
           <div className={cx("wrapper-button")}>
-            <div className={cx("modal-button-cancel")} onClick={handleOk}>
+            <div
+              className={cx("modal-button-cancel")}
+              onClick={handleOkAddProduct}
+            >
               Cancel
             </div>
 
-            <div className={cx("modal-button-submit")} onClick={handleOk}>
+            <div
+              className={cx("modal-button-submit")}
+              onClick={handleOkAddProduct}
+            >
               Submit
             </div>
           </div>,
@@ -256,6 +404,7 @@ const Product = () => {
               <div className={cx("dropdown")}>
                 {listType.map((item, i) => (
                   <div
+                    key={item.id}
                     className={cx("dropdownitem")}
                     onClick={() => {
                       setIsDropdownType(!isDropdownType);
@@ -289,6 +438,7 @@ const Product = () => {
               <div className={cx("dropdown")}>
                 {listCompany.map((item, i) => (
                   <div
+                    key={item.id}
                     className={cx("dropdownitem")}
                     onClick={() => {
                       setIsDropdownCompany(!isDropdownCompany);
@@ -342,14 +492,7 @@ const Product = () => {
           </div>
           <div className={cx("modal-input")}>
             <p>Image</p>
-            <Upload
-              onChange={handleOnChangeImage}
-              fileList={
-                stateProduct.image
-                  ? [{ uid: "-1", name: "image.png", status: "done" }]
-                  : []
-              }
-            >
+            <Upload onChange={handleOnChangeImage}>
               {stateProduct.image ? (
                 <img
                   src={stateProduct.image}
@@ -361,6 +504,171 @@ const Product = () => {
                   type="file"
                   value={stateProduct.image}
                   onChange={handleOnChange}
+                  name="image"
+                />
+              )}
+            </Upload>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal
+        title="Basic Modal"
+        open={isModalOpenEditProduct}
+        onOk={handleOkEditProduct}
+        onCancel={handleCancelEditProduct}
+        footer={[
+          <div className={cx("wrapper-button")}>
+            <div
+              className={cx("modal-button-cancel")}
+              onClick={handleCancelEditProduct}
+            >
+              Cancel
+            </div>
+
+            <div
+              className={cx("modal-button-submit")}
+              onClick={handleOkEditProduct}
+            >
+              Submit
+            </div>
+          </div>,
+        ]}
+      >
+        <div>
+          <div className={cx("modal-input")}>
+            <p>Name:</p>
+            <input
+              type="text"
+              value={stateProductDetails.name}
+              onChange={handleOnChangeDetails}
+              name="name"
+            />
+          </div>
+          <div className={cx("modal-input")}>
+            <p>Type:</p>
+
+            <input
+              type="button"
+              value={stateProductDetails.type}
+              onChange={handleOnChangeDetails}
+              onClick={() => {
+                setIsDropdownType(!isDropdownType);
+              }}
+              name="type"
+            />
+          </div>
+
+          {isDropdownType ? (
+            <div className={cx("wrapper")}>
+              <div className={cx("dropdown")}>
+                {listType.map((item, i) => (
+                  <div
+                    className={cx("dropdownitem")}
+                    onClick={() => {
+                      setIsDropdownType(!isDropdownType);
+                      setStateProductDetails({
+                        ...stateProductDetails,
+                        type: item.name,
+                      });
+                    }}
+                  >
+                    <p>{item.name}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
+          <div className={cx("modal-input")}>
+            <p>Company:</p>
+            <input
+              type="button"
+              value={stateProductDetails.company}
+              onChange={handleOnChangeDetails}
+              onClick={() => {
+                setIsDropdownCompany(!isDropdownCompany);
+              }}
+              name="company"
+            />
+          </div>
+          {isDropdownCompany ? (
+            <div className={cx("wrapper")}>
+              <div className={cx("dropdown")}>
+                {listCompany.map((item, i) => (
+                  <div
+                    className={cx("dropdownitem")}
+                    onClick={() => {
+                      setIsDropdownCompany(!isDropdownCompany);
+                      setStateProductDetails({
+                        ...stateProductDetails,
+                        company: item.name,
+                      });
+                    }}
+                  >
+                    <p>{item.name}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : null}
+          <div className={cx("modal-input")}>
+            <p>Price:</p>
+            <input
+              type="text"
+              value={stateProductDetails.price}
+              onChange={handleOnChangeDetails}
+              name="price"
+            />
+          </div>
+          <div className={cx("modal-input")}>
+            <p>countInStock:</p>
+            <input
+              type="text"
+              value={stateProductDetails.countInStock}
+              onChange={handleOnChangeDetails}
+              name="countInStock"
+            />
+          </div>
+          <div className={cx("modal-input")}>
+            <p>Rating:</p>
+            <input
+              type="text"
+              value={stateProductDetails.rating}
+              onChange={handleOnChangeDetails}
+              name="rating"
+            />
+          </div>
+          <div className={cx("modal-input")}>
+            <p>Description</p>
+            <input
+              type="text"
+              value={stateProductDetails.description}
+              onChange={handleOnChangeDetails}
+              name="description"
+            />
+          </div>
+          <div className={cx("modal-input")}>
+            <p>Image</p>
+            <Upload
+              onChange={handleOnChangeImageDetails}
+              // fileList={
+              //   stateProductDetails.image
+              //     ? [{ uid: "-1", name: "image.png", status: "done" }]
+              //     : []
+              // }
+            >
+              {stateProductDetails.image ? (
+                <img
+                  src={stateProductDetails.image}
+                  alt="Uploaded Image"
+                  style={{ maxWidth: "100px" }}
+                />
+              ) : (
+                <input
+                  type="file"
+                  value={stateProductDetails.image}
+                  onChange={handleOnChangeDetails}
                   name="image"
                 />
               )}

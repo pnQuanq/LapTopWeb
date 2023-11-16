@@ -135,7 +135,7 @@ const Header = () => {
               </div>
             </Tooltip>
           </div>
-          <div className={cx("cart")}>
+          <div className={cx("cart")} onClick={handleCart}>
             <FontAwesomeIcon
               icon={faCartShopping}
               style={{ marginRight: "16px" }}

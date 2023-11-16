@@ -101,7 +101,7 @@ const Register = () => {
     navigate("/login");
   };
   return (
-    <div className={cx("wrapper")}>
+    <div className={cx("container")}>
       <div className={cx("inner")}>
         <div className={cx("form-box-register")}>
           <h2>Register</h2>
