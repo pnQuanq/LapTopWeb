@@ -11,6 +11,37 @@ import CardItem from "../../components/CardItem/CardItem";
 import Data from "../../Data/Data";
 const cx = classNames.bind(styles);
 const PCGaming = () => {
+  const [PData, setPData] = useState([]);
+
+  const fetchProductAll = async () => {
+    try {
+      const res = await ProductService.getAllProduct();
+      console.log("Data fetched:", res);
+      return res;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await fetchProductAll();
+        setPData(result.data);
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+
+    fetchData();
+    console.log("PData:", PData);
+  }, []);
+
+  useEffect(() => {
+    console.log("Rerendered!");
+  }, [PData]);
+
+  console.log("data products: ", PData);
+  
   const NormalPc = Data.filter((index) => {
     return index.type === "gaming-pc";
   });
