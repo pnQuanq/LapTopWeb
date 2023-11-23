@@ -25,6 +25,7 @@ const Header = () => {
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user);
+  const order = useSelector((state) => state.order);
 
   const handleLogin = () => {
     navigate("/login");
@@ -136,10 +137,34 @@ const Header = () => {
             </Tooltip>
           </div>
           <div className={cx("cart")} onClick={handleCart}>
-            <FontAwesomeIcon
-              icon={faCartShopping}
-              style={{ marginRight: "16px" }}
-            />
+            <div>
+              {order?.orderItems.length ? (
+                <label
+                  style={{
+                    position: "absolute",
+                    fontSize: "12px",
+                    backgroundColor: "red",
+                    color: "#fff",
+                    top: "30%",
+                    width: "15px",
+                    height: "15px",
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginLeft: "-8px",
+                  }}
+                >
+                  {order?.orderItems?.length}
+                </label>
+              ) : (
+                <></>
+              )}
+              <FontAwesomeIcon
+                icon={faCartShopping}
+                style={{ marginRight: "16px" }}
+              />
+            </div>
             <div>Đơn hàng</div>
           </div>
         </div>
