@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import styles from "./PCGaming.module.scss";
 import classNames from "classnames/bind";
@@ -6,7 +6,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
-
+import * as ProductService from "../../services/ProductService";
 import CardItem from "../../components/CardItem/CardItem";
 import Data from "../../Data/Data";
 const cx = classNames.bind(styles);
@@ -42,8 +42,8 @@ const PCGaming = () => {
 
   console.log("data products: ", PData);
   
-  const NormalPc = Data.filter((index) => {
-    return index.type === "gaming-pc";
+  const NormalPc = PData.filter((index) => {
+    return index.type === "gaming-PC";
   });
 
   return (
