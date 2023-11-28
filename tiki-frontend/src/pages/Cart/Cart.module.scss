@@ -7,15 +7,39 @@
 .wrapper{
     display: flex;
     flex-direction: row;
-
 }
 
 .content{
     display: flex;
     flex: 3;
-    flex-direction: row;
-    background-color: aqua;
-    margin-right: 16px;
+    flex-direction: column;
+    .title{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 16px;
+        background-color: white;
+    }
+    p{
+        position: relative;
+        left: 8px;
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+    .empty{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 300px;
+        background-color: white;
+        margin: 16px 0px;
+        p{
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+    }
 }
 
 .firm{
@@ -25,6 +49,7 @@
     flex-direction: column;
     border-radius: 4px;
     height: 350px;
+    margin-left: 16px;
 }
 
 .price-content{

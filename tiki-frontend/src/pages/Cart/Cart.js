@@ -1,20 +1,15 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Cart.module.scss";
 import classNames from "classnames/bind";
-import { useLocation, useNavigate } from "react-router-dom";
-import { Table } from "antd";
-import * as AiIcons from "react-icons/ai";
 import { useSelector } from "react-redux";
+import CardCart from "../../components/CardCart/CardCart";
 
 const cx = classNames.bind(styles);
 
 const Cart = () => {
-  const [amount, setAmount] = useState(1);
   const [Data, setData] = useState([]);
-
   const order = useSelector((state) => state.order);
   const { orderItems } = order;
-  console.log("orderItems", orderItems);
 
   useEffect(() => {
     if (orderItems) {
@@ -30,55 +25,13 @@ const Cart = () => {
       });
     }
   }, [orderItems]);
-  console.log("Data", Data);
+  console.log("Data ", Data);
 
-  const columns = [
-    {
-      title: "Image",
-      dataIndex: "image",
-      render: (image) => <img src={image} width={150} alt="Uploaded Image" />,
-    },
-
-    {
-      title: "Sản phẩm",
-      dataIndex: "name",
-    },
-
-    {
-      title: "Đơn giá",
-      dataIndex: "price",
-      render: (text) => <p style={{ fontWeight: "550" }}>{text}</p>,
-    },
-    {
-      title: "Số lượng",
-      dataIndex: "amount",
-      render: () => (
-        <div className={cx("quantity-wrapper")}>
-          <button onClick={handleDown}>-</button>
-          <p>{amount}</p>
-          <button onClick={handleUp}>+</button>
-        </div>
-      ),
-    },
-    // lam toi day roi
-    {
-      title: "Thành tiền",
-      dataIndex: "total",
-    },
-    {
-      title: "Xóa",
-      dataIndex: "delete",
-      render: () => <AiIcons.AiOutlineDelete />,
-    },
-  ];
-
-  const handleDown = () => {
-    if (amount > 1) {
-      setAmount(amount - 1);
-    }
-  };
-  const handleUp = () => {
-    setAmount(amount + 1);
+  const calculateTotal = () => {
+    const total = Data.reduce((acc, item) => {
+      return acc + item.total;
+    }, 0);
+    return total;
   };
 
   return (
@@ -86,11 +39,22 @@ const Cart = () => {
       <h1 style={{ paddingBlock: "1rem" }}>Giỏ hàng</h1>
       <div className={cx("wrapper")}>
         <div className={cx("content")}>
-          <Table
-            columns={columns}
-            dataSource={Data}
-            style={{ width: "100%" }}
-          />
+          <div className={cx("title")}>
+            <p style={{ flex: 2 }}>Sản phẩm</p>
+            <p style={{ flex: 1 }}>Đơn giá</p>
+            <p style={{ flex: 1 }}>Số lượng</p>
+            <p style={{ flex: 1 }}>Thành tiền</p>
+            <p style={{ flex: 0.5 }}>Xóa</p>
+          </div>
+          {Data.length !== 0 ? (
+            Data.map((item, index) => {
+              return <CardCart key={index} props={item} />;
+            })
+          ) : (
+            <div className={cx("empty")}>
+              <p>Không có sản phẩm nào trong giỏ hàng</p>
+            </div>
+          )}
         </div>
         <div className={cx("firm")}>
           <div className={cx("price-content")}>
@@ -100,7 +64,7 @@ const Cart = () => {
             <div className={cx("price-detail")}>
               <lable className={cx("lable")}>
                 Tạm tính:
-                <lable>đ</lable>
+                <lable>{calculateTotal()}đ</lable>
               </lable>
               <lable className={cx("lable")}>
                 Giảm giá:
@@ -113,7 +77,7 @@ const Cart = () => {
             </div>
             <div className={cx("price-total")}>
               <p>Tổng cộng:</p>
-              <p className={cx("total")}>đ</p>
+              <p className={cx("total")}>{calculateTotal() + 30000}đ</p>
             </div>
           </div>
           <div className={cx("button-buy")}>
