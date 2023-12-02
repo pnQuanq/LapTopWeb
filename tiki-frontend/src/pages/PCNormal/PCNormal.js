@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import styles from "./PCNormal.module.scss";
 import classNames from "classnames/bind";
@@ -6,12 +6,44 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
-
+import * as ProductService from "../../services/ProductService";
 import CardItem from "../../components/CardItem/CardItem";
 import Data from "../../Data/Data";
 const cx = classNames.bind(styles);
 const PCNormal = () => {
-  const NormalPc = Data.filter((index) => {
+
+  const [PData, setPData] = useState([]);
+
+  const fetchProductAll = async () => {
+    try {
+      const res = await ProductService.getAllProduct();
+      console.log("Data fetched:", res);
+      return res;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await fetchProductAll();
+        setPData(result.data);
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+
+    fetchData();
+    console.log("PData:", PData);
+  }, []);
+
+  useEffect(() => {
+    console.log("Rerendered!");
+  }, [PData]);
+
+  console.log("data products: ", PData);
+
+  const NormalPc = PData.filter((index) => {
     return index.type === "normal-pc";
   });
   return (
