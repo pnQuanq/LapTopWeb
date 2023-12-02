@@ -21,6 +21,8 @@ const CardItem = ({ props }) => {
     return result;
   };
 
+  const numberFormat = new Intl.NumberFormat("en-US");
+
   return (
     <div className={cx("wrapper")}>
       <div
@@ -39,7 +41,7 @@ const CardItem = ({ props }) => {
       <div className={cx("info")}>
         <p className={cx("name")}>{props.name}</p>
         <div className={cx("rate")}>{renderRate()}</div>
-        <p className={cx("price")}> {props.price} </p>
+        <p className={cx("price")}> {numberFormat.format(props.price)}VNĐ </p>
       </div>
     </div>
   );

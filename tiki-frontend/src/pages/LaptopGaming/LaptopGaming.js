@@ -8,10 +8,8 @@ import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
 import * as ProductService from "../../services/ProductService";
 import CardItem from "../../components/CardItem/CardItem";
-import Data from "../../Data/Data";
 const cx = classNames.bind(styles);
 const LaptopGaming = () => {
-
   const [PData, setPData] = useState([]);
 
   const fetchProductAll = async () => {
@@ -23,6 +21,7 @@ const LaptopGaming = () => {
       console.error("Error fetching data:", error);
     }
   };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -36,11 +35,6 @@ const LaptopGaming = () => {
     fetchData();
     console.log("PData:", PData);
   }, []);
-
-  useEffect(() => {
-    console.log("Rerendered!");
-  }, [PData]);
-
   console.log("data products: ", PData);
 
   const LaptopGamingASUS = PData.filter((index) => {

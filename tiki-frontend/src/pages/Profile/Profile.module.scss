@@ -1,100 +1,104 @@
 .customer-container {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 2rem;
-  
-    .contents-container, .misc-container {
-      background-color: white;
-      padding: 1rem;
-      border-radius: 1rem;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+
+  .contents-container, .misc-container {
+    background-color: white;
+    padding: 1rem;
+    border-radius: 1rem;
+  }
+
+  .contents-container {
+    img {
+      background-color: lightcyan;
+      border: 4px solid lightskyblue;
+      border-radius: 50%;
+      float: left;
+      width: 20rem;
+      height: 20rem;
     }
-  
-    .contents-container {
-      img {
-        background-color: lightcyan;
-        border: 4px solid lightskyblue;
-        border-radius: 50%;
-        float: left;
-        width: 20rem;
-        height: 20rem;
-      }
-  
-      h1, h3 {
-        padding-block: 1rem;
-      }
-  
-      table {
-        padding-inline-start: 2rem;
-      }
-  
-      tr > td:first-of-type {
-        padding-block: 1rem;
-      }
-  
-      tr > td:last-of-type {
-        padding-inline: 4rem;
-      }
-  
-  
-      tr > td:last-of-type > input[type="text"] {
-        width: 30rem;
-        font-size: 1.5rem;
-        padding: 0.5rem;
-      }
-  
-      tr:nth-of-type(3) > td:last-of-type * {
-        vertical-align: middle;
-      }
-  
-      tr:nth-of-type(3) > td:last-of-type > input {
-        width: 2rem;
-        height: 2rem;
-      }
-  
-      tr > td:last-of-type > input[type="radio"] + label {
-        padding-inline: 1rem;
-      }
+
+    h1, h3 {
+      padding-block: 1rem;
+    }
+
+    table {
+      padding-inline-start: 2rem;
+    }
+
+    tr > td:first-of-type {
+      padding-block: 1rem;
+    }
+
+    tr > td:last-of-type {
+      padding-inline: 4rem;
+    }
+
+
+    tr > td:last-of-type > input[type="text"] {
+      width: 30rem;
+      font-size: 1.5rem;
+      padding: 0.5rem;
+    }
+
+    tr:nth-of-type(3) > td:last-of-type * {
+      vertical-align: middle;
+    }
+
+    tr:nth-of-type(3) > td:last-of-type > input {
+      width: 2rem;
+      height: 2rem;
+    }
+
+    tr > td:last-of-type > input[type="radio"] + label {
+      padding-inline: 1rem;
+    }
+    
+    .centered-btn {
+      clear: both;
+      display: flex;
+      justify-content: center;
+      padding-block: 4rem;
       
-      .centered-btn {
-        clear: both;
-        display: flex;
-        justify-content: center;
-        padding-block: 4rem;
-        
-        button {
-          width: auto;
-          height: auto;
-          padding: 1rem 4rem;
-          color: white;
-          background-color: var(--primary);
-        }
-        button:hover {
-          background-color: #0a68ffcc;
-        }
-      }
-    }
-  
-    .misc-container {
-      table {
-        width: 100%;
-        border-spacing: 1rem;
-      }
-      th {
-        text-align: start;
-        padding-block: 1rem;
-      }
       button {
-        font-size: initial;
-        color: var(--primary);
-        border: 1px solid var(--primary);
+        width: auto;
+        height: auto;
+        padding: 1rem 4rem;
+        color: white;
+        background-color: var(--primary);
       }
       button:hover {
-        border: 0;
-        background: #0a68ff33;
+        background-color: #0a68ffcc;
       }
     }
+  }
+
+  .misc-container {
+    table {
+      width: 100%;
+      border-spacing: 1rem;
+    }
+    th {
+      text-align: start;
+      padding-block: 1rem;
+    }
     button {
-      border-radius: 0.5rem;
       font-size: initial;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+    button:hover {
+      border: 0;
+      background: #0a68ff33;
     }
   }
+  button {
+    border-radius: 0.5rem;
+    font-size: initial;
+  }
+}
+
+span{
+  font-size: 12px;
+}

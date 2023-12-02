@@ -4,6 +4,7 @@ import classNames from "classnames/bind";
 import { useMutationHook } from "../../hooks/useMutationHook";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "../../redux/slide/userSlide";
+import { getBase64 } from "../../utils";
 import * as UserService from "../../services/UserService";
 
 const cx = classNames.bind(styles);
@@ -42,6 +43,27 @@ const Profile = () => {
     const res = await UserService.getDetailsUser(id, token);
     dispatch(updateUser({ ...res?.data, access_token: token }));
   };
+
+  const handleOnchangeEmail = (value) => {
+    setEmail(value);
+  };
+  const handleOnchangeName = (value) => {
+    setName(value);
+  };
+  const handleOnchangePhone = (value) => {
+    setPhone(value);
+  };
+  const handleOnchangeAddress = (value) => {
+    setAddress(value);
+  };
+
+  const handleOnchangeAvatar = async ({ fileList }) => {
+    const file = fileList[0];
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setAvatar(file.preview);
+  };
   const handleUpdate = () => {
     mutation.mutate({
       id: user?.id,
@@ -70,7 +92,11 @@ const Profile = () => {
                 <label>Tên</label>
               </td>
               <td>
-                <input type="text" value={name}></input>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={() => handleOnchangeName()}
+                />
               </td>
             </tr>
             <tr>
