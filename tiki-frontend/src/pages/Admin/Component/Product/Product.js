@@ -12,10 +12,10 @@ import useSelection from "antd/es/table/hooks/useSelection";
 const cx = classNames.bind(styles);
 
 const Product = () => {
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [isModalOpenAddProduct, setIsModalOpenAddProduct] = useState(false);
   const [rowSelected, setRowSelected] = useState("");
   const [isModalOpenEditProduct, setIsModalOpenEditProduct] = useState(false);
+
   const [isDropdownType, setIsDropdownType] = useState(false);
   const [isDropdownCompany, setIsDropdownCompany] = useState(false);
   const [Data, setData] = useState([]);
@@ -40,14 +40,20 @@ const Product = () => {
     description: "",
     image: "",
   });
+  const user = useSelection((state) => state?.user);
 
   const mutation = useMutationHook((data) =>
     ProductService.createProduct(data)
   );
-  const user = useSelection((state) => state?.user);
   const mutationUpdate = useMutationHook((data) => {
     const { id, token, ...rests } = data;
     const res = ProductService.updateProduct(id, token, { ...rests });
+    return res;
+  });
+
+  const mutationDeleted = useMutationHook((data) => {
+    const { id, token } = data;
+    const res = ProductService.deleteProduct(id, token);
     return res;
   });
   const columns = [
@@ -87,14 +93,20 @@ const Product = () => {
     },
     {
       title: "Action",
-      render: () => (
+      render: (text, record) => (
         <div>
-          <AiIcons.AiFillDelete className={cx("AiIcons")} color="red" />
+          <AiIcons.AiFillDelete
+            className={cx("AiIcons")}
+            color="red"
+            onClick={() => {
+              handleDeleteProduct(record);
+            }}
+          />
           <AiIcons.AiFillEdit
             className={cx("AiIcons")}
             color="#F0E68C"
             onClick={() => {
-              handleDetailProduct();
+              handleDetailProduct(record);
             }}
           />
         </div>
@@ -149,20 +161,9 @@ const Product = () => {
     isSuccess: isSuccessUpdated,
     isError: isErrorUpdated,
   } = mutationUpdate;
+
+  const { data: dataDeleted, isLoading: isLoadingDeleted } = mutationDeleted;
   // add product
-  useEffect(() => {
-    if (isSuccess && mutation.data.status === "OK") {
-      alert("Thêm sản phẩm thành công");
-      console.log(mutation.data.status);
-    } else if (isSuccess && mutation.data.status === "ERR") {
-      alert(mutation.data.message);
-      console.log("mutation.data.status:", mutation.data);
-    } else if (isError) {
-      alert(mutation.data);
-      console.log("ERR mutation.data:", mutation.data);
-      console.log("ERR mutationERR:", mutation.error);
-    }
-  }, [isSuccess, isError]);
 
   //Fetch ALL data
   const fetchProductAll = async () => {
@@ -174,7 +175,6 @@ const Product = () => {
       console.error("Error fetching data:", error);
     }
   };
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -189,40 +189,20 @@ const Product = () => {
     console.log("Data:", Data);
   }, []);
 
-  // const fecthGetProductDetail = async (rowSelected) => {
-  //   try {
-  //     const res = await ProductService.getDetailsProduct(rowSelected);
-  //     if (res.data.status === "OK") {
-  //       setStateProductDetails({
-  //         name: res?.data?.name,
-  //         type: res?.data?.type,
-  //         company: res?.data?.company,
-  //         price: res?.data?.price,
-  //         countInStock: res?.data?.countInStock,
-  //         rating: res?.data?.rating,
-  //         description: res?.data?.description,
-  //         image: res?.data?.image,
-  //       });
-  //       console.log("RES StateProductDetails:", res);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
+  useEffect(() => {
+    if (isSuccess && mutation.data.status === "OK") {
+      alert("Thêm sản phẩm thành công");
+      console.log(mutation.data.status);
+      window.location.reload();
+    } else if (isError) {
+      alert(mutation.data);
+      console.log("ERR mutation.data:", mutation.data);
+      console.log("ERR mutationERR:", mutation.error);
+    }
+  }, [isSuccess, isError]);
 
-  const onSelectChange = (newSelectedRowKeys) => {
-    console.log("selectedRowKeys changed: ", newSelectedRowKeys);
-    setSelectedRowKeys(newSelectedRowKeys);
-  };
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectChange,
-  };
-
-  //Add product
   const handleOkAddProduct = () => {
     mutation.mutate(stateProduct);
-    console.log("stateProduct", stateProduct);
     setIsModalOpenAddProduct(false);
   };
   const handleCancelAddProduct = () => {
@@ -247,11 +227,11 @@ const Product = () => {
 
   //Edit product
 
-  const handleDetailProduct = () => {
-    fetchGetDetailsProduct();
+  const handleDetailProduct = (record) => {
+    setRowSelected(record._id);
+    fetchGetDetailsProduct(record._id);
     setIsModalOpenEditProduct(true);
   };
-
   const fetchGetDetailsProduct = async (rowSelected) => {
     try {
       const res = await ProductService.getDetailsProduct(rowSelected);
@@ -271,27 +251,12 @@ const Product = () => {
       console.log("error", error);
     }
   };
-  useEffect(() => {
-    if (rowSelected) {
-      fetchGetDetailsProduct(rowSelected);
-    }
-  }, [rowSelected]);
-
   const handleOkEditProduct = () => {
     mutationUpdate.mutate({
       id: rowSelected,
       token: user?.accessToken,
       ...stateProductDetails,
     });
-    if (isSuccessUpdated) {
-      alert("Cập nhật thành công");
-      setIsModalOpenEditProduct(false);
-    } else if (isErrorUpdated) {
-      alert("Cập nhật thất bại");
-      //setIsModalOpenEditProduct(false);
-    }
-    //setIsModalOpenEditProduct(false);
-    //window.location.reload();
   };
   const handleCancelEditProduct = () => {
     setStateProductDetails({
@@ -327,6 +292,30 @@ const Product = () => {
     }
   };
 
+  useEffect(() => {
+    if (isSuccessUpdated) {
+      alert("Cập nhật thành công");
+      window.location.reload();
+    }
+  }, [isSuccessUpdated]);
+
+  //Delete product
+  const handleDeleteProduct = (record) => {
+    if (window.confirm("Bạn có muốn xoá sản phẩm này không?")) {
+      mutationDeleted.mutate({
+        id: record._id,
+        token: user?.accessToken,
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (dataDeleted?.status === "OK") {
+      alert("Xóa thành công");
+      window.location.reload();
+    }
+  }, [dataDeleted]);
+
   return (
     <div className={cx("container")}>
       <p>Quản lí sản phẩm</p>
@@ -339,19 +328,33 @@ const Product = () => {
         +
       </div>
       <div className={cx("content")}>
-        <Table
-          rowSelection={rowSelection}
-          columns={columns}
-          dataSource={Data}
-          onRow={(record, rowIndex) => {
-            return {
-              onClick: (event) => {
-                setRowSelected(record._id);
-              },
-            };
-          }}
-        />
+        <Table columns={columns} dataSource={Data} />
       </div>
+      {/* <Modal
+        title="Basic Modal"
+        open={isModalOpenDeleteProduct}
+        onOk={handleOkDeleteProduct}
+        onCancel={handleCancelDeleteProduct}
+        footer={[
+          <div className={cx("wrapper-button")}>
+            <div
+              className={cx("modal-button-cancel")}
+              onClick={handleCancelDeleteProduct}
+            >
+              Cancel
+            </div>
+
+            <div
+              className={cx("modal-button-submit")}
+              onClick={handleOkDeleteProduct}
+            >
+              Submit
+            </div>
+          </div>,
+        ]}
+      >
+        <p>Bạn có muốn xoá sản phẩm này không???</p>
+      </Modal> */}
       <Modal
         title="Basic Modal"
         open={isModalOpenAddProduct}
@@ -511,7 +514,6 @@ const Product = () => {
           </div>
         </div>
       </Modal>
-
       <Modal
         title="Basic Modal"
         open={isModalOpenEditProduct}

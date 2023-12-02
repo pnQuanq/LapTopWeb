@@ -1,7 +1,8 @@
 const routes = {
   home: "/",
   order: "/order", //đơn hàng
-  Cart: "/cart", // giỏ hàng
+  cart: "/cart", // giỏ hàng
+  payment: "/payment", // thanh toán
   laptop: "/laptop",
   laptopgaming: "/laptopgaming",
   pcgaming: "/pcgaming",

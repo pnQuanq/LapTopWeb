@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import styles from "./LaptopGaming.module.scss";
 import classNames from "classnames/bind";
@@ -6,28 +6,54 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
-
+import * as ProductService from "../../services/ProductService";
 import CardItem from "../../components/CardItem/CardItem";
-import Data from "../../Data/Data";
 const cx = classNames.bind(styles);
 const LaptopGaming = () => {
-  const LaptopGamingASUS = Data.filter((index) => {
+  const [PData, setPData] = useState([]);
+
+  const fetchProductAll = async () => {
+    try {
+      const res = await ProductService.getAllProduct();
+      console.log("Data fetched:", res);
+      return res;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await fetchProductAll();
+        setPData(result.data);
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+
+    fetchData();
+    console.log("PData:", PData);
+  }, []);
+  console.log("data products: ", PData);
+
+  const LaptopGamingASUS = PData.filter((index) => {
     return index.type === "gaming-laptop" && index.company === "ASUS";
   });
 
-  const LaptopGamingACER = Data.filter((index) => {
+  const LaptopGamingACER = PData.filter((index) => {
     return index.type === "gaming-laptop" && index.company === "ACER";
   });
 
-  const LaptopGamingLENOVO = Data.filter((index) => {
+  const LaptopGamingLENOVO = PData.filter((index) => {
     return index.type === "gaming-laptop" && index.company === "LENOVO";
   });
 
-  const LaptopGamingMSI = Data.filter((index) => {
+  const LaptopGamingMSI = PData.filter((index) => {
     return index.type === "gaming-laptop" && index.company === "MSI";
   });
 
-  const LaptopGamingDELL = Data.filter((index) => {
+  const LaptopGamingDELL = PData.filter((index) => {
     return index.type === "gaming-laptop" && index.company === "DELL";
   });
 

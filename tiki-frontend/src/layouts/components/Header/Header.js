@@ -51,6 +51,8 @@ const Header = () => {
   const handleLogout = async () => {
     await UserService.logoutUser();
     dispatch(resetUser());
+    setVisible(false);
+    navigate("/");
   };
 
   console.log("user: ", user);
@@ -152,7 +154,7 @@ const Header = () => {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    marginLeft: "-8px",
+                    marginLeft: "12px",
                   }}
                 >
                   {order?.orderItems?.length}

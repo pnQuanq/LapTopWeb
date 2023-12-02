@@ -3,13 +3,17 @@ import styles from "./Cart.module.scss";
 import classNames from "classnames/bind";
 import { useSelector } from "react-redux";
 import CardCart from "../../components/CardCart/CardCart";
+import { useNavigate } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
 const Cart = () => {
   const [Data, setData] = useState([]);
   const order = useSelector((state) => state.order);
+  const navigate = useNavigate();
   const { orderItems } = order;
+
+  const numberFormat = new Intl.NumberFormat("en-US");
 
   useEffect(() => {
     if (orderItems) {
@@ -32,6 +36,15 @@ const Cart = () => {
       return acc + item.total;
     }, 0);
     return total;
+  };
+
+  const handlePayment = () => {
+    if (Data.length === 0) {
+      alert("Không có sản phẩm nào trong giỏ hàng");
+      return;
+    } else {
+      navigate("/payment");
+    }
   };
 
   return (
@@ -64,24 +77,26 @@ const Cart = () => {
             <div className={cx("price-detail")}>
               <lable className={cx("lable")}>
                 Tạm tính:
-                <lable>{calculateTotal()}đ</lable>
+                <lable>{numberFormat.format(calculateTotal())}VNĐ</lable>
               </lable>
               <lable className={cx("lable")}>
                 Giảm giá:
-                <lable>đ</lable>
+                <lable>0 VNĐ</lable>
               </lable>
               <lable className={cx("lable")}>
                 Phí vận chuyển:
-                <lable>30.000đ</lable>
+                <lable>{numberFormat.format(30000)}VNĐ</lable>
               </lable>
             </div>
             <div className={cx("price-total")}>
               <p>Tổng cộng:</p>
-              <p className={cx("total")}>{calculateTotal() + 30000}đ</p>
+              <p className={cx("total")}>
+                {numberFormat.format(calculateTotal() + 30000)}VNĐ
+              </p>
             </div>
           </div>
           <div className={cx("button-buy")}>
-            <button>Thanh toán</button>
+            <button onClick={handlePayment}>Thanh toán</button>
           </div>
         </div>
       </div>

@@ -19,6 +19,7 @@ import Nothing from "../layouts/Nothing/Nothing";
 import Admin from "../pages/Admin/Admin";
 import NotFoundPage from "../pages/NotFoundPage/NotFoundPage";
 import Profile from "../pages/Profile/Profile";
+import Payment from "../pages/Payment/Payment";
 
 const routes = [
   {
@@ -43,8 +44,14 @@ const routes = [
   },
 
   {
-    path: config.routes.Cart,
+    path: config.routes.cart,
     component: Cart,
+    layout: HeaderOnly,
+  },
+
+  {
+    path: config.routes.payment,
+    component: Payment,
     layout: HeaderOnly,
   },
 

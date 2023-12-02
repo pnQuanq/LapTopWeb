@@ -13,11 +13,6 @@ import * as ProductService from "../../services/ProductService";
 const cx = classNames.bind(styles);
 
 const Home = () => {
-  // const fetchProductAll = async () => {
-  //   const res = await ProductService.getAllProduct();
-  //   return res;
-  // };
-
   const [PData, setPData] = useState([]);
 
   const fetchProductAll = async () => {
@@ -42,11 +37,6 @@ const Home = () => {
     fetchData();
     console.log("PData:", PData);
   }, []);
-
-  useEffect(() => {
-    console.log("Rerendered!");
-  }, [PData]);
-
   console.log("data products: ", PData);
 
   return (
