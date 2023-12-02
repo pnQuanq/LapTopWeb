@@ -57,6 +57,12 @@ const LaptopGaming = () => {
     return index.type === "gaming-laptop" && index.company === "DELL";
   });
 
+  console.log("LaptopGamingASUS: ", LaptopGamingASUS);
+  console.log("LaptopGamingACER: ", LaptopGamingACER);
+  console.log("LaptopGamingLENOVO: ", LaptopGamingLENOVO);
+  console.log("LaptopGamingMSI: ", LaptopGamingMSI);
+  console.log("LaptopGamingDELL: ", LaptopGamingDELL);
+
   return (
     <div className={cx("container")}>
       <div className={cx("content")}>

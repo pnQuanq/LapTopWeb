@@ -134,11 +134,11 @@ const Product = () => {
   const listCompany = [
     {
       id: 1,
-      name: "Asus",
+      name: "ASUS",
     },
     {
       id: 2,
-      name: "Lenovo",
+      name: "LENOVO",
     },
     {
       id: 3,

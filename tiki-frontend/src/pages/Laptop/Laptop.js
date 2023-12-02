@@ -10,7 +10,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import CardItem from "../../components/CardItem/CardItem";
 import { useQuery } from "@tanstack/react-query";
 import * as ProductService from "../../services/ProductService";
-import Data from "../../Data/Data";
 
 const cx = classNames.bind(styles);
 
@@ -47,7 +46,7 @@ const Laptop = () => {
   console.log("data products: ", PData);
 
   const NormalLaptopASUS = PData.filter((index) => {
-    return index.type === "normal-laptop" && index.company === "ASUS";
+    return index.type === "normal-laptop" && index.company === "Asus";
   });
 
   const NormalLaptopACER = PData.filter((index) => {
