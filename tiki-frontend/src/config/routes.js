@@ -3,6 +3,7 @@ const routes = {
   order: "/order", //đơn hàng
   cart: "/cart", // giỏ hàng
   payment: "/payment", // thanh toán
+  ordersuccess: "/ordersuccess", // đặt hàng thành công
   laptop: "/laptop",
   laptopgaming: "/laptopgaming",
   pcgaming: "/pcgaming",

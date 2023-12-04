@@ -14,6 +14,7 @@ const cx = classNames.bind(styles);
 
 const CardCart = ({ props }) => {
   const dispatch = useDispatch();
+  const numberFormat = new Intl.NumberFormat("en-US");
 
   const handleChangeCount = (type, idProduct, limited) => {
     if (type === "increase") {
@@ -40,7 +41,7 @@ const CardCart = ({ props }) => {
           </div>
           <div className={cx("name")}>{props.name}</div>
         </div>
-        <div className={cx("price")}>{props.price}</div>
+        <div className={cx("price")}>{numberFormat.format(props.price)}Đ</div>
         <div className={cx("quantity")}>
           <div className={cx("wrapper-quantity")}>
             <button
@@ -70,8 +71,7 @@ const CardCart = ({ props }) => {
           </div>
         </div>
         <div className={cx("total")}>
-          {props.amount * props.price}
-          <span>đ</span>
+          {numberFormat.format(props.amount * props.price)}Đ
         </div>
         <div className={cx("remove")}>
           <AiOutlineDelete
