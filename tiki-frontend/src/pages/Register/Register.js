@@ -102,7 +102,7 @@ const Register = () => {
   };
 
   return (
-    <div className={cx("wrapper")}>
+    <div className={cx("container")}>
       <div className={cx("inner")}>
         <div className={cx("form-box-register")}>
           <h2>Register</h2>
@@ -177,7 +177,7 @@ const Register = () => {
                     isFocusedConfirmPass || isValidConfirmPass ? "0" : "24px",
                 }}
               >
-                Password
+                Re-enter Password
               </label>
             </div>
             <button onClick={handleRegister}>Register</button>
