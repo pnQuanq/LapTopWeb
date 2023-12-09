@@ -1,5 +1,11 @@
 const UserService = require("../services/UserService");
 const JwtService = require("../services/JwtService");
+const asyncHandler = require("express-async-handler");
+const mongoose = require("mongoose");
+const User = require("../models/UserModel");
+const Product = require("../models/ProductModel");
+const Cart = require("../models/CartModel");
+const { use } = require("../routes/UserRouter");
 
 const createUser = async (req, res) => {
   try {
@@ -81,6 +87,194 @@ const updateUser = async (req, res) => {
     });
   }
 };
+const createUserCart = asyncHandler(async (req, res) => {
+  const cartItem = req.body; // Assuming req.body is a single cart item
+  const userId = req.params.id;
+
+  try {
+    const user = await User.findById(userId);
+
+    // Check if the user already has a cart
+    let existingCart = await Cart.findOne({ orderby: user?._id });
+
+    if (existingCart) {
+      console.log("cartItem", cartItem);
+      // If the user has an existing cart, update it
+      const product = {
+        product: cartItem._id,
+        name: cartItem.name,
+        image: cartItem.image,
+        amount: cartItem.amount,
+        price: cartItem.price,
+      };
+
+      const getPrice = await Product.findById(cartItem._id)
+        .select("price")
+        .exec();
+      product.price = getPrice.price;
+
+      // Add the new product to the existing cart
+      existingCart.products.push(product);
+
+      // Recalculate the cart total
+      existingCart.cartTotal = existingCart.products.reduce(
+        (total, product) => total + product.price * product.amount,
+        0
+      );
+
+      await existingCart.save();
+      res.json(existingCart);
+    } else {
+      // If the user doesn't have an existing cart, create a new one
+      const product = {
+        product: cartItem._id,
+        name: cartItem.name,
+        image: cartItem.image,
+        amount: cartItem.amount,
+        price: cartItem.price,
+      };
+
+      const getPrice = await Product.findById(cartItem._id)
+        .select("price")
+        .exec();
+      product.price = getPrice.price;
+
+      const newCart = await new Cart({
+        products: [product],
+        cartTotal: product.price * product.amount,
+        orderby: user?._id,
+      }).save();
+
+      user.cart = newCart._id;
+      await user.save();
+
+      res.json(newCart);
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+const getUserCart = asyncHandler(async (req, res) => {
+  const _id = req.params.id;
+  try {
+    const cart = await Cart.findOne({ orderby: _id }).populate(
+      "products.product"
+    );
+    res.json(cart);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+const updateUserCart = asyncHandler(async (req, res) => {
+  const userId = req.params.id;
+  const productId = req.params.idProduct;
+  const newAmount = req.body.amount;
+  try {
+    if (!userId) {
+      return res.status(200).json({
+        status: "ERR",
+        message: "The userId is required",
+      });
+    }
+    if (!productId) {
+      return res.status(200).json({
+        status: "ERR",
+        message: "The productId is required",
+      });
+    }
+    if (!newAmount || isNaN(newAmount) || newAmount <= 0) {
+      return res.status(400).json({
+        status: "ERR",
+        message: "Invalid amount provided",
+      });
+    }
+    try {
+      const user = await User.findById(userId);
+      const existingCart = await Cart.findOne({ orderby: user._id });
+      const productIndex = existingCart.products.findIndex(
+        (product) => product.product.toString() === productId
+      );
+      if (productIndex === -1) {
+        return res
+          .status(404)
+          .json({ message: "Product not found in the cart" });
+      }
+      existingCart.products[productIndex].amount = newAmount;
+      existingCart.cartTotal = existingCart.products.reduce(
+        (total, product) => {
+          const productTotal = product.price * product.amount;
+          console.log("productTotal", productTotal);
+          // Ensure productTotal is a valid number
+          return isNaN(productTotal) ? total : total + productTotal;
+        },
+        0
+      );
+
+      await existingCart.save();
+      return res.status(200).json({
+        status: "OK",
+        message: "update amount product in cart success",
+      });
+    } catch (e) {
+      return res.status(404).json({
+        message: e,
+      });
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+const deleteProductUserCart = asyncHandler(async (req, res) => {
+  const userId = req.params.id;
+  const productId = req.params.idProduct;
+  try {
+    if (!userId) {
+      return res.status(200).json({
+        status: "ERR",
+        message: "The userId is required",
+      });
+    }
+    if (!productId) {
+      return res.status(200).json({
+        status: "ERR",
+        message: "The productId is required",
+      });
+    }
+    try {
+      const user = await User.findById(userId);
+      const existingCart = await Cart.findOne({ orderby: user._id });
+      const productIndex = existingCart.products.findIndex(
+        (product) => product.product.toString() === productId
+      );
+      if (productIndex === -1) {
+        return res
+          .status(404)
+          .json({ message: "Product not found in the cart" });
+      }
+      existingCart.products.splice(productIndex, 1);
+      existingCart.cartTotal = existingCart.products.reduce(
+        (total, product) => total + product.price * product.amount,
+        0
+      );
+      await existingCart.save();
+      return res.status(200).json({
+        status: "OK",
+        message: "Delete product in cart success",
+      });
+    } catch (e) {
+      return res.status(404).json({
+        message: e,
+      });
+    }
+  } catch (e) {
+    return res.status(404).json({
+      message: e,
+    });
+  }
+});
 
 const deleteUser = async (req, res) => {
   try {
@@ -166,24 +360,6 @@ const refreshToken = async (req, res) => {
   }
 };
 
-// const refreshToken = async (req, res) => {
-//   try {
-//     let token = req.headers.token.split(" ")[1];
-//     if (!token) {
-//       return res.status(200).json({
-//         status: "ERR",
-//         message: "The token is required",
-//       });
-//     }
-//     const response = await JwtService.refreshTokenJwtService(token);
-//     return res.status(200).json(response);
-//   } catch (e) {
-//     return res.status(404).json({
-//       message: e,
-//     });
-//   }
-// };
-
 const logoutUser = async (req, res) => {
   try {
     res.clearCookie("refresh_token");
@@ -201,6 +377,10 @@ module.exports = {
   createUser,
   loginUser,
   updateUser,
+  createUserCart,
+  getUserCart,
+  updateUserCart,
+  deleteProductUserCart,
   deleteUser,
   getAllUser,
   getDetailsUser,

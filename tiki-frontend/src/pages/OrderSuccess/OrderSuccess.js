@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import styles from "./Payment.module.scss";
+import styles from "./OrderSuccess.module.scss";
 import classNames from "classnames/bind";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -14,7 +14,7 @@ import * as OrderService from "../../services/OrderService";
 
 const cx = classNames.bind(styles);
 
-const Payment = () => {
+const OderSuccess = () => {
   const deliveryMethods = [
     { key: "standard", label: "Standard Delivery", fee: 30000 },
     { key: "express", label: "Express Delivery", fee: 50000 },
@@ -90,6 +90,8 @@ const Payment = () => {
     province && fetchPublicDistrict(province);
   }, [province]);
 
+  console.log({ province, district });
+
   useEffect(() => {
     const total = Data.reduce((acc, item) => {
       return acc + item.total;
@@ -143,7 +145,7 @@ const Payment = () => {
           user: user?.id,
           email: user?.email,
         });
-        alert("Đặt hàng thành công", navigate("/ordersuccess"));
+        console.log("order", order, user);
       }
     }
   };
@@ -359,4 +361,4 @@ const Payment = () => {
   );
 };
 
-export default Payment;
+export default OderSuccess;

@@ -3,40 +3,30 @@ import styles from "./Cart.module.scss";
 import classNames from "classnames/bind";
 import { useSelector } from "react-redux";
 import CardCart from "../../components/CardCart/CardCart";
+import * as UserService from "../../services/UserService";
 import { useNavigate } from "react-router-dom";
+import { useMutationHook } from "../../hooks/useMutationHook";
+import { updateCartUser } from "../../services/UserService";
 
 const cx = classNames.bind(styles);
 
 const Cart = () => {
   const [Data, setData] = useState([]);
-  const order = useSelector((state) => state.order);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const user = useSelector((state) => state.user);
+  const cart = useSelector((state) => state.cart);
+  const { products } = cart;
   const navigate = useNavigate();
-  const { orderItems } = order;
 
   const numberFormat = new Intl.NumberFormat("en-US");
 
   useEffect(() => {
-    if (orderItems) {
-      setData(orderItems);
-      setData((prev) => {
-        const newData = prev.map((item) => {
-          return {
-            ...item,
-            total: item.price * item.amount,
-          };
-        });
-        return newData;
-      });
+    if (products) {
+      console.log("products", cart);
+      setData(products);
+      setTotalPrice(cart.cartTotal);
     }
-  }, [orderItems]);
-  console.log("Data ", Data);
-
-  const calculateTotal = () => {
-    const total = Data.reduce((acc, item) => {
-      return acc + item.total;
-    }, 0);
-    return total;
-  };
+  }, [products]);
 
   const handlePayment = () => {
     if (Data.length === 0) {
@@ -60,7 +50,7 @@ const Cart = () => {
             <p style={{ flex: 0.5 }}>Xóa</p>
           </div>
           {Data.length !== 0 ? (
-            Data.map((item, index) => {
+            Data?.map((item, index) => {
               return <CardCart key={index} props={item} />;
             })
           ) : (
@@ -77,7 +67,7 @@ const Cart = () => {
             <div className={cx("price-detail")}>
               <lable className={cx("lable")}>
                 Tạm tính:
-                <lable>{numberFormat.format(calculateTotal())}VNĐ</lable>
+                <lable>{numberFormat.format(totalPrice)}VNĐ</lable>
               </lable>
               <lable className={cx("lable")}>
                 Giảm giá:
@@ -85,13 +75,13 @@ const Cart = () => {
               </lable>
               <lable className={cx("lable")}>
                 Phí vận chuyển:
-                <lable>{numberFormat.format(30000)}VNĐ</lable>
+                <lable>0 VNĐ</lable>
               </lable>
             </div>
             <div className={cx("price-total")}>
               <p>Tổng cộng:</p>
               <p className={cx("total")}>
-                {numberFormat.format(calculateTotal() + 30000)}VNĐ
+                {numberFormat.format(Data.cartTotal)}VNĐ
               </p>
             </div>
           </div>

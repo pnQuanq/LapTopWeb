@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import styles from "./Payment.module.scss";
+import styles from "./OrderSuccess.module.scss";
 import classNames from "classnames/bind";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -14,7 +14,7 @@ import * as OrderService from "../../services/OrderService";
 
 const cx = classNames.bind(styles);
 
-const Payment = () => {
+const OderSuccess = () => {
   const deliveryMethods = [
     { key: "standard", label: "Standard Delivery", fee: 30000 },
     { key: "express", label: "Express Delivery", fee: 50000 },
@@ -44,8 +44,6 @@ const Payment = () => {
   const [name, setName] = useState(user.name);
   const [address, setAddress] = useState(user.address);
   const [phone, setPhone] = useState(user.phone);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
   const { orderItems } = order;
 
   const numberFormat = new Intl.NumberFormat("en-US");
@@ -89,6 +87,8 @@ const Payment = () => {
     };
     province && fetchPublicDistrict(province);
   }, [province]);
+
+
 
   useEffect(() => {
     const total = Data.reduce((acc, item) => {
@@ -143,7 +143,7 @@ const Payment = () => {
           user: user?.id,
           email: user?.email,
         });
-        alert("Đặt hàng thành công", navigate("/ordersuccess"));
+        console.log("order", order, user);
       }
     }
   };
@@ -156,7 +156,6 @@ const Payment = () => {
   const handleCancel = () => {
     setIsOpenModal(false);
   };
-
   const handleOnChangePhone = (e) => {
     setPhone(e.target.value);
   };
@@ -359,4 +358,4 @@ const Payment = () => {
   );
 };
 
-export default Payment;
+export default OderSuccess;

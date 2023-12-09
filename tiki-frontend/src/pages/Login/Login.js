@@ -69,6 +69,10 @@ const Login = () => {
         "access_token",
         JSON.stringify(mutation.data?.access_token)
       );
+      localStorage.setItem(
+        "refresh_token",
+        JSON.stringify(mutation.data?.refresh_token)
+      );
       if (mutation.data?.access_token) {
         const decoded = jwt_decode(mutation.data?.access_token);
         console.log("decoded", decoded);
@@ -83,8 +87,10 @@ const Login = () => {
   }, [isSuccess]);
 
   const handleGetDetailUser = async (id, token) => {
+    const storage = localStorage.getItem("refresh_token");
+    const refreshToken = JSON.parse(storage);
     const res = await UserService.getDetailsUser(id, token);
-    dispatch(updateUser({ ...res?.data, access_token: token }));
+    dispatch(updateUser({ ...res?.data, access_token: token, refreshToken }));
     console.log("res", res);
   };
 
