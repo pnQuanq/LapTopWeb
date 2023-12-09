@@ -1,7 +1,7 @@
 import config from "../config";
 
 import Home from "../pages/Home/Home";
-import Order from "../pages/Order/Order";
+import OrderSuccess from "../pages/OrderSuccess/OrderSuccess";
 import Cart from "../pages/Cart/Cart";
 import HeaderOnly from "../layouts/HeaderOnly/HeaderOnly";
 import Laptop from "../pages/Laptop/Laptop";
@@ -38,10 +38,6 @@ const routes = [
     path: config.routes.home,
     component: Home,
   },
-  {
-    path: config.routes.order,
-    component: Order,
-  },
 
   {
     path: config.routes.cart,
@@ -52,6 +48,12 @@ const routes = [
   {
     path: config.routes.payment,
     component: Payment,
+    layout: HeaderOnly,
+  },
+
+  {
+    path: config.routes.ordersuccess,
+    component: OrderSuccess,
     layout: HeaderOnly,
   },
 
@@ -98,7 +100,6 @@ const routes = [
   {
     path: config.routes.productdetail,
     component: ProductDetail,
-
     layout: HeaderOnly,
   },
 

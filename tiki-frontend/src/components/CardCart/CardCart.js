@@ -1,35 +1,60 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./CardCart.module.scss";
 import classNames from "classnames/bind";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineDelete } from "react-icons/ai";
 import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   decreaseAmount,
   increaseAmount,
-  removeOrderProduct,
-} from "../../redux/slide/orderSlide";
+  removeCartProduct,
+} from "../../redux/slide/cartSlide";
+import * as UserSerVice from "../../services/UserService";
 
 const cx = classNames.bind(styles);
 
 const CardCart = ({ props }) => {
   const dispatch = useDispatch();
   const numberFormat = new Intl.NumberFormat("en-US");
+  const user = useSelector((state) => state.user);
 
-  const handleChangeCount = (type, idProduct, limited) => {
+  const [amount, setAmount] = useState(props?.amount);
+  const [price, setPrice] = useState(props?.price * props?.amount);
+  const handleChangeCount = async (type, idProduct, limited) => {
     if (type === "increase") {
       if (!limited) {
-        dispatch(increaseAmount({ idProduct }));
+        setAmount(amount + 1);
+        setPrice(price + props?.price);
+        dispatch(increaseAmount(idProduct));
+        recurse();
       }
     } else {
-      if (!limited) {
-        dispatch(decreaseAmount({ idProduct }));
+      if (amount > 1) {
+        setAmount(amount - 1);
+        setPrice(price - props?.price);
+        dispatch(decreaseAmount(idProduct));
+      } else {
+        setAmount(1);
       }
     }
   };
+  const recurse = () => {
+    if (user?.id) {
+      UserSerVice.updateUserCart(
+        user?.id,
+        props?.product,
+        amount + 1,
+        user?.access_token
+      );
+    } else {
+      recurse();
+    }
+  };
 
-  const handleDeleteOrder = (idProduct) => {
-    dispatch(removeOrderProduct({ idProduct }));
+  const handleDeleteProductinCart = (id, idProduct) => {
+    dispatch(removeCartProduct({ idProduct }));
+    UserSerVice.deleteUserCart(id, idProduct, user?.access_token);
   };
 
   return (
@@ -37,11 +62,16 @@ const CardCart = ({ props }) => {
       <div className={cx("wrapper")}>
         <div className={cx("product")}>
           <div className={cx("image")}>
-            <img src={props.image} alt="img" width={"100px"} height={"100px"} />
+            <img
+              src={props?.image}
+              alt="img"
+              width={"100px"}
+              height={"100px"}
+            />
           </div>
-          <div className={cx("name")}>{props.name}</div>
+          <div className={cx("name")}>{props?.name}</div>
         </div>
-        <div className={cx("price")}>{numberFormat.format(props.price)}Đ</div>
+        <div className={cx("price")}>{numberFormat.format(props?.price)}Đ</div>
         <div className={cx("quantity")}>
           <div className={cx("wrapper-quantity")}>
             <button
@@ -49,20 +79,20 @@ const CardCart = ({ props }) => {
                 handleChangeCount(
                   "decrease",
                   props?.product,
+
                   props?.amount === 1
                 )
               }
             >
               -
             </button>
-            <p>{props.amount}</p>
+            <p>{amount}</p>
             <button
               onClick={() =>
                 handleChangeCount(
                   "increase",
                   props?.product,
-                  props?.amount === props?.countInstock,
-                  props?.amount === 1
+                  props?.amount === props?.product?.countInStock
                 )
               }
             >
@@ -70,14 +100,12 @@ const CardCart = ({ props }) => {
             </button>
           </div>
         </div>
-        <div className={cx("total")}>
-          {numberFormat.format(props.amount * props.price)}Đ
-        </div>
+        <div className={cx("total")}>{numberFormat.format(price)}Đ</div>
         <div className={cx("remove")}>
           <AiOutlineDelete
             size="2rem"
             color="red"
-            onClick={() => handleDeleteOrder(props?.product)}
+            onClick={() => handleDeleteProductinCart(user?.id, props?.product)}
           />
         </div>
       </div>

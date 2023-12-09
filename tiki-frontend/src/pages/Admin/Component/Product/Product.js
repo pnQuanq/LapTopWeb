@@ -330,31 +330,7 @@ const Product = () => {
       <div className={cx("content")}>
         <Table columns={columns} dataSource={Data} />
       </div>
-      {/* <Modal
-        title="Basic Modal"
-        open={isModalOpenDeleteProduct}
-        onOk={handleOkDeleteProduct}
-        onCancel={handleCancelDeleteProduct}
-        footer={[
-          <div className={cx("wrapper-button")}>
-            <div
-              className={cx("modal-button-cancel")}
-              onClick={handleCancelDeleteProduct}
-            >
-              Cancel
-            </div>
 
-            <div
-              className={cx("modal-button-submit")}
-              onClick={handleOkDeleteProduct}
-            >
-              Submit
-            </div>
-          </div>,
-        ]}
-      >
-        <p>Bạn có muốn xoá sản phẩm này không???</p>
-      </Modal> */}
       <Modal
         title="Basic Modal"
         open={isModalOpenAddProduct}

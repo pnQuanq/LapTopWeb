@@ -25,7 +25,7 @@ const Header = () => {
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user);
-  const order = useSelector((state) => state.order);
+  const cart = useSelector((state) => state.cart);
 
   const handleLogin = () => {
     navigate("/login");
@@ -140,7 +140,7 @@ const Header = () => {
           </div>
           <div className={cx("cart")} onClick={handleCart}>
             <div>
-              {order?.orderItems.length ? (
+              {cart.products.length ? (
                 <label
                   style={{
                     position: "absolute",
@@ -157,7 +157,7 @@ const Header = () => {
                     marginLeft: "12px",
                   }}
                 >
-                  {order?.orderItems?.length}
+                  {cart.products?.length}
                 </label>
               ) : (
                 <></>

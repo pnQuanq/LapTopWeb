@@ -12,9 +12,11 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import CardItem from "../../components/CardItem/CardItem";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import * as ProductService from "../../services/ProductService";
+import * as UserService from "../../services/UserService";
 import Data from "../../Data/Data";
 import { useDispatch, useSelector } from "react-redux";
-import { addOrderProduct } from "../../redux/slide/orderSlide";
+import { addtoCart } from "../../redux/slide/cartSlide";
+import { useMutationHook } from "../../hooks/useMutationHook";
 
 const cx = classNames.bind(styles);
 
@@ -26,6 +28,11 @@ const ProductDetail = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const { id } = useParams();
+  const mutation = useMutationHook((cartData) =>
+    UserService.addUserCart(user.id, cartData, user.token)
+  );
+
+  const numberFormat = new Intl.NumberFormat("en-US");
 
   const handleDown = () => {
     if (quantity > 1) {
@@ -52,21 +59,46 @@ const ProductDetail = () => {
     }
   }, [id]);
 
-  const handleBuy = () => {
+  const handleBuy = async () => {
     if (!user?.id) {
       navigate("/login", { state: location.pathname });
     } else {
-      dispatch(
-        addOrderProduct({
-          orderItem: {
-            product: detailProduct._id,
-            name: detailProduct.name,
-            image: detailProduct.image,
-            price: detailProduct.price,
-            amount: quantity,
-          },
-        })
-      );
+      // dispatch(
+      //   addtoCart({
+      //     products: {
+      //       product: detailProduct._id,
+      //       name: detailProduct.name,
+      //       image: detailProduct.image,
+      //       price: detailProduct.price,
+      //       amount: quantity,
+      //     },
+      //   })
+      // );
+
+      const cart = {
+        _id: detailProduct._id,
+        name: detailProduct.name,
+        image: detailProduct.image,
+        amount: quantity,
+        price: detailProduct.price,
+      };
+      try {
+        mutation.mutate(cart);
+        dispatch(
+          addtoCart({
+            products: {
+              product: detailProduct._id,
+              name: detailProduct.name,
+              image: detailProduct.image,
+              price: detailProduct.price,
+              amount: quantity,
+            },
+          })
+        );
+      } catch (error) {
+        console.log("error", error);
+      }
+
       alert("Đã thêm vào giỏ hàng");
     }
   };
@@ -105,7 +137,7 @@ const ProductDetail = () => {
               </p>
             </div>
             <div className={cx("price")}>
-              <p>{detailProduct.price}</p>
+              <p>{numberFormat.format(detailProduct.price)} VNĐ</p>
             </div>
           </div>
           <div className={cx("option-info")}>

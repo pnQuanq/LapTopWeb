@@ -79,7 +79,7 @@ export const logoutUser = async () => {
 };
 
 export const updateUser = async (id, data, access_token) => {
-  const res = await axiosJWT.put(
+  const res = await axiosJWT.post(
     `${process.env.REACT_APP_API_URL}/user/update-user/${id}`,
     data,
     {
@@ -89,6 +89,81 @@ export const updateUser = async (id, data, access_token) => {
     }
   );
   return res.data;
+};
+
+export const addUserCart = async (id, cartData, access_token) => {
+  const res = await axiosJWT.post(
+    `${process.env.REACT_APP_API_URL}/user/cart-user/${id}`,
+    cartData,
+    {
+      headers: {
+        token: `Bearer ${access_token}`,
+      },
+    }
+  );
+  return res.data;
+};
+
+export const getUserCart = async (id, access_token) => {
+  const res = await axiosJWT.get(
+    `${process.env.REACT_APP_API_URL}/user/get-cart-user/${id}`,
+    {
+      headers: {
+        token: `Bearer ${access_token}`,
+      },
+    }
+  );
+  return res.data;
+};
+
+export const updateUserCart = async (id, idProduct, amount, access_token) => {
+  const res = await axiosJWT.put(
+    `${process.env.REACT_APP_API_URL}/user/update-cart-user/${id}/${idProduct}`,
+    { amount },
+    {
+      headers: {
+        token: `Bearer ${access_token}`,
+      },
+    }
+  );
+  return res.data;
+};
+
+export const deleteUserCart = async (id, idProduct, access_token) => {
+  const res = await axiosJWT.delete(
+    `${process.env.REACT_APP_API_URL}/user/delete-cart-user/${id}/${idProduct}`,
+
+    {
+      headers: {
+        token: `Bearer ${access_token}`,
+      },
+    }
+  );
+  return res.data;
+};
+
+export const addOrderProduct = async (id, cart, access_token) => {
+  try {
+    const res = await axiosJWT.put(
+      `${process.env.REACT_APP_API_URL}/cart-user/${id}`,
+      { cart },
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`, // Use Authorization header for token
+          //"Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (res.status !== 200) {
+      throw new Error("Failed to update user cart");
+    }
+
+    return res.data;
+  } catch (error) {
+    console.error("Error updating user cart:", error.message);
+    throw error; // You may want to handle the error in your component or return a default value
+  }
 };
 
 export const deleteManyUser = async (data, access_token) => {
