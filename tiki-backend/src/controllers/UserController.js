@@ -7,6 +7,42 @@ const Product = require("../models/ProductModel");
 const Cart = require("../models/CartModel");
 const { use } = require("../routes/UserRouter");
 
+const createToken = (_id) => {
+  const jwtSecret = process.env.JWT_SECRET;
+
+  return jwt.sign({ _id }, jwtSecret, {expiresIn: "3d" });
+};
+
+const verifyEmail = async (req, res) => {
+  try {
+    const emailToken = req.body.emailToken;
+
+    if (!emailToken) return res.status(404).json("EmailToken not found!");
+
+    const user = await User.findOne({ emailToken });
+
+    if (user) {
+      user.emailToken = null;
+      user.isVerified = true;
+
+      await user.save();
+
+      const token =createToken(user._id);
+
+      res.status(200).json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        token,
+        isVerified: user?.isVerified,
+      });
+    }else res.status(404).json("Email verification failed, invalid token!");
+  }catch (error) {
+    console.log(error);
+    res.status(500).json(error.message);
+  }
+};
+
 const createUser = async (req, res) => {
   try {
     const { name, email, password, confirmPassword, phone } = req.body;
@@ -374,6 +410,7 @@ const logoutUser = async (req, res) => {
   }
 };
 module.exports = {
+  verifyEmail,
   createUser,
   loginUser,
   updateUser,

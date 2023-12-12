@@ -1,6 +1,7 @@
 const User = require("../models/UserModel");
 const bcrypt = require("bcrypt");
 const { genneralAccessToken, genneralRefreshToken } = require("./JwtService");
+const crypto = require("crypto");
 
 const createUser = (newUser) => {
   return new Promise(async (resolve, reject) => {
@@ -21,6 +22,7 @@ const createUser = (newUser) => {
         email,
         password: hash,
         phone,
+        emailToken: crypto.randomBytes(64).toString("hex"),
       });
       if (createdUser) {
         resolve({

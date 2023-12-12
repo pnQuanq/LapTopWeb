@@ -9,7 +9,8 @@ const userSchema = new mongoose.Schema(
     address: { type: String, default: "" },
     avatar: { type: String },
     city: { type: String },
-    verified: { type: Boolean, default: false},
+    isVerified: { type: Boolean, default: false},
+    emailToken: { type: String},
     cart: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Cart",
