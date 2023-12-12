@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export const isJsonString = (data) => {
   try {
     JSON.parse(data);
@@ -77,3 +79,16 @@ export const initFacebookSDK = () => {
     fjs.parentNode.insertBefore(js, fjs);
   })(document, "script", "facebook-jssdk");
 };
+
+//new change
+
+const request = axios.create({
+    baseURL: 'https://tiktok.fullstack.edu.vn/api/',
+});
+
+export const get = async (path, options = {}) => {
+    const response = await request.get(path, options);
+    return response.data;
+}
+
+export default request;
