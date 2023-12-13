@@ -6,13 +6,14 @@ import { baseUrl, postRequest } from '../../utils/service';
 
 const VerifyEmail = () => {
   const { user, updateUser } = useContext(AuthContext);
+  console.log(user);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState({name: 'testerror'});
   // const { SearchParams, setSearchParams } = useSearchParams();
   // const navigate = useNavigate();
   
   // const emailToken = SearchParams.get("emailToken");
-  console.log('-------------------------------------------------');
+  // console.log('-------------------------------------------------');
   // console.log(user);
   // console.log('--------------------------------------------------------------------');
   // console.log("EmailToken", emailToken);
