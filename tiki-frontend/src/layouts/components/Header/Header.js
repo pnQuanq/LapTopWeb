@@ -14,6 +14,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { Tooltip } from "react-tippy";
 import { resetUser } from "../../../redux/slide/userSlide";
+import { resetState } from "../../../redux/slide/cartSlide";
 
 import Search from "../Search";
 
@@ -53,6 +54,7 @@ const Header = () => {
   const handleLogout = async () => {
     await UserService.logoutUser();
     dispatch(resetUser());
+    dispatch(resetState());
     setVisible(false);
     navigate("/");
   };

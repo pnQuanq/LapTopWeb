@@ -9,11 +9,17 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import CardItem from "../../components/CardItem/CardItem";
 import { useQuery } from "@tanstack/react-query";
 import * as ProductService from "../../services/ProductService";
+import * as UserService from "../../services/UserService";
+import { setCartProduct } from "../../redux/slide/cartSlide";
+import { useDispatch, useSelector } from "react-redux";
 
 const cx = classNames.bind(styles);
 
 const Home = () => {
   const [PData, setPData] = useState([]);
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
+  const cart = useSelector((state) => state.cart);
 
   const fetchProductAll = async () => {
     try {
@@ -27,17 +33,27 @@ const Home = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        //fetch all products
         const result = await fetchProductAll();
         setPData(result.data);
+        //fetch cart user
+        const userCartPromise = UserService.getUserCart(
+          user?.id,
+          user?.access_token
+        );
+        if (userCartPromise instanceof Promise) {
+          const DBData = await userCartPromise;
+          dispatch(setCartProduct(DBData));
+          console.log("user cart :", cart);
+        } else {
+          console.error("getUserCart does not return a Promise");
+        }
       } catch (error) {
         console.log("error", error);
       }
     };
-
     fetchData();
-    console.log("PData:", PData);
-  }, []);
-  console.log("data products: ", PData);
+  }, [user]);
 
   return (
     <div className={cx("container")}>
