@@ -5,16 +5,16 @@ import { AuthContext } from "../../context/AuthContext";
 import { baseUrl, postRequest } from '../../utils/service';
 
 const VerifyEmail = () => {
-  const { user, updateUser } = useContext(AuthContext);
+  // const { user, updateUser } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
   // const { SearchParams, setSearchParams } = useSearchParams();
   // const navigate = useNavigate();
   
   // const emailToken = SearchParams.get("emailToken");
-  console.log('-------------------------------------------------');
+  // console.log('-------------------------------------------------');
   // console.log(user);
-  console.log('--------------------------------------------------------------------');
+  // console.log('--------------------------------------------------------------------');
   // console.log("EmailToken", emailToken);
 
   // useEffect(() => {
@@ -62,11 +62,11 @@ const VerifyEmail = () => {
                     </div>
                 ) : (
                     <div>
-                        {error ? (
+                        {error && (
                             <Alert severity='error'>
                                 {error}
                             </Alert>
-                        ) : {}}
+                        )}
                     </div>
                 )}
             </div>
