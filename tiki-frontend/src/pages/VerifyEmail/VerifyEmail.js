@@ -1,12 +1,11 @@
 import { useContext, useEffect, useState} from "react";
-// import { useSearchParams, useNavigate} from "react-router-dom";
+import { useSearchParams, useNavigate} from "react-router-dom";
 import { Alert, CircularProgress } from "@mui/material";
 import { AuthContext } from "../../context/AuthContext";
-// import { baseUrl, postRequest } from '../../utils/service';
+import { baseUrl, postRequest } from '../../utils/service';
 
 const VerifyEmail = () => {
-  // const [user, updateUser] = useState(true);
-  const [user, updateUser] = useContext(AuthContext);
+  const { user, updateUser } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
   // const { SearchParams, setSearchParams } = useSearchParams();
@@ -14,7 +13,7 @@ const VerifyEmail = () => {
   
   // const emailToken = SearchParams.get("emailToken");
   console.log('-------------------------------------------------');
-  console.log(user);
+  // console.log(user);
   console.log('--------------------------------------------------------------------');
   // console.log("EmailToken", emailToken);
 
@@ -63,11 +62,11 @@ const VerifyEmail = () => {
                     </div>
                 ) : (
                     <div>
-                        {error} ? (
+                        {error ? (
                             <Alert severity='error'>
                                 {error}
                             </Alert>
-                        ) : {}
+                        ) : {}}
                     </div>
                 )}
             </div>
