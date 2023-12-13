@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState} from "react";
-import { useSearchParams, useNavigate} from "react-router-dom";
+// import { useSearchParams, useNavigate} from "react-router-dom";
 import { Alert, CircularProgress } from "@mui/material";
 import { AuthContext } from "../../context/AuthContext";
-import { baseUrl, postRequest } from '../../utils/service';
+// import { baseUrl, postRequest } from '../../utils/service';
 
 const VerifyEmail = () => {
   // const [user, updateUser] = useState(true);
