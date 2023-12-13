@@ -58,6 +58,15 @@
     .location{
         display: flex;
         flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .phone{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        margin: -16px 0px;
     }
     .price-detail{
         display: flex;
@@ -119,4 +128,72 @@
         }
 
     }
+    
+}
+
+.wrapper-button{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.modal-button-submit{
+    background-color: aqua;
+    padding: 8px 16px;
+    border-radius: 8px;
+    margin: 0 8px;
+    border: 1px solid #ccc;
+    &:hover{
+        cursor: pointer;
+    }
+}
+.modal-button-cancel{
+    background-color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    margin: 0 8px;
+    border: 1px solid #ccc;
+    &:hover{
+        cursor: pointer;
+    }
+}
+
+.modal-input{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    margin-right: 32px;
+    p{
+
+        display: flex;
+        font-size: 16px;
+        font-weight: 500;
+        justify-content: flex-end;
+    }
+    input{
+
+        width: 300px;
+        height: 40px;
+        margin-left: 8px;
+        padding: 8px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        &:focus{
+            outline: none;
+        }
+    }
+
+    select{
+        width: 300px;
+        height: 40px;
+        margin-left: 8px;
+        padding: 8px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        &:focus{
+            outline: none;
+        }
+    }
+    
 }
