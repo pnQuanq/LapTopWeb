@@ -24,6 +24,7 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [detailProduct, setDetailProduct] = useState({});
   const user = useSelector((state) => state.user);
+  const cart = useSelector((state) => state.cart);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
@@ -92,6 +93,9 @@ const ProductDetail = () => {
               image: detailProduct.image,
               price: detailProduct.price,
               amount: quantity,
+            },
+            user: {
+              user: user?.id,
             },
           })
         );

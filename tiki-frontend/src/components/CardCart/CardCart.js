@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./CardCart.module.scss";
 import classNames from "classnames/bind";
-import { useNavigate } from "react-router-dom";
 import { AiOutlineDelete } from "react-icons/ai";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
@@ -26,33 +25,48 @@ const CardCart = ({ props }) => {
       if (!limited) {
         setAmount(amount + 1);
         setPrice(price + props?.price);
+        recurseIncrease();
         dispatch(increaseAmount(idProduct));
-        recurse();
       }
     } else {
       if (amount > 1) {
         setAmount(amount - 1);
         setPrice(price - props?.price);
+        recurseDecrease();
         dispatch(decreaseAmount(idProduct));
-      } else {
+      } else if (amount === 1) {
         setAmount(1);
       }
     }
   };
-  const recurse = () => {
+  const recurseIncrease = () => {
     if (user?.id) {
       UserSerVice.updateUserCart(
         user?.id,
-        props?.product,
+        props.id,
         amount + 1,
         user?.access_token
       );
     } else {
-      recurse();
+      recurseIncrease();
     }
   };
 
+  const recurseDecrease = () => {
+    if (user?.id) {
+      UserSerVice.updateUserCart(
+        user?.id,
+        props.id,
+        amount - 1,
+        user?.access_token
+      );
+    } else {
+      recurseDecrease();
+    }
+  };
   const handleDeleteProductinCart = (id, idProduct) => {
+    console.log("id", id);
+    console.log("idproductdelete", idProduct);
     dispatch(removeCartProduct({ idProduct }));
     UserSerVice.deleteUserCart(id, idProduct, user?.access_token);
   };
@@ -78,7 +92,7 @@ const CardCart = ({ props }) => {
               onClick={() =>
                 handleChangeCount(
                   "decrease",
-                  props?.product,
+                  props.id,
 
                   props?.amount === 1
                 )
@@ -89,11 +103,7 @@ const CardCart = ({ props }) => {
             <p>{amount}</p>
             <button
               onClick={() =>
-                handleChangeCount(
-                  "increase",
-                  props?.product,
-                  props?.amount === props?.product?.countInStock
-                )
+                handleChangeCount("increase", props.id, props?.amount === 50)
               }
             >
               +
@@ -105,7 +115,7 @@ const CardCart = ({ props }) => {
           <AiOutlineDelete
             size="2rem"
             color="red"
-            onClick={() => handleDeleteProductinCart(user?.id, props?.product)}
+            onClick={() => handleDeleteProductinCart(user?.id, props.id)}
           />
         </div>
       </div>
