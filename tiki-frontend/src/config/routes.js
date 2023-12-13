@@ -17,6 +17,7 @@ const routes = {
   register: "/register",
   profile: "/profile",
   admin: "/system/admin",
+  verifyEmail: "verify-email",
 };
 
 export default routes;
