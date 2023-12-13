@@ -1,4 +1,5 @@
 const routes = {
+  verifyEmail: "/verifyEmail",
   home: "/",
   order: "/order", //đơn hàng
   cart: "/cart", // giỏ hàng

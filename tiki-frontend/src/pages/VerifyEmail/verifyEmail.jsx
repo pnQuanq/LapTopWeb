@@ -6,9 +6,9 @@ import { baseUrl, postRequest } from '../../utils/service';
 
 const verifyEmail = () => {
   const { user, updateUser } = useContext(AuthContext);
-  const { isLoading, setIsLoading } = useState(false);
-  const { error, setError } = useState(false);
-  const { SearchParams, setSearchParams } = useSearchParams();
+  const [ isLoading, setIsLoading ] = useState(false);
+  const [ error, setError ] = useState(false);
+  const [ SearchParams, setSearchParams ] = useSearchParams();
   const navigate = useNavigate();
   
   const emailToken = SearchParams.get("emailToken");
@@ -38,8 +38,8 @@ const verifyEmail = () => {
                 if (response.error) {
                     return setError(response);
                 }
-
-                updateUser(response);
+                // neu email chua verified thi updateUser 
+                updateUser(response); //responese lay userData tu backend (id, name, email, token, isVerified)
             }
         }
     })();
