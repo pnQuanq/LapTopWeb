@@ -158,10 +158,22 @@ const createUserCart = asyncHandler(async (req, res) => {
 const getUserCart = asyncHandler(async (req, res) => {
   const _id = req.params.id;
   try {
-    const cart = await Cart.findOne({ orderby: _id }).populate(
-      "products.product"
-    );
-    res.json(cart);
+    const cart = await Cart.findOne({ orderby: _id })
+      .populate("products.product")
+      .exec();
+    const cartData = {
+      cartTotal: cart.cartTotal,
+      products: cart.products.map((product) => {
+        return {
+          id: product.product.id,
+          name: product.product.name,
+          amount: product.amount,
+          image: product.product.image,
+          price: product.price,
+        };
+      }),
+    };
+    res.json(cartData);
   } catch (error) {
     throw new Error(error);
   }
