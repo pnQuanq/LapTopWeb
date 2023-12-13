@@ -20,6 +20,7 @@ import Admin from "../pages/Admin/Admin";
 import NotFoundPage from "../pages/NotFoundPage/NotFoundPage";
 import Profile from "../pages/Profile/Profile";
 import Payment from "../pages/Payment/Payment";
+import VerifyEmail from "../pages/VerifyEmail/verifyEmail";
 
 const routes = [
   {
@@ -31,6 +32,12 @@ const routes = [
   {
     path: config.routes.register,
     component: Register,
+    layout: Nothing,
+  },
+
+  {
+    path: config.routes.verifyEmail,
+    component: VerifyEmail,
     layout: Nothing,
   },
 
