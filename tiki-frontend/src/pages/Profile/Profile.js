@@ -114,6 +114,12 @@ const Profile = () => {
     });
   };
 
+  const handleSaveChanges = () => {
+    // Add logic to save changes to backend or state
+    setIsEditing(false);
+  };
+
+  const handleCancelChanges = () => {
     
     setIsEditing(false);
   };
@@ -132,7 +138,6 @@ const Profile = () => {
           <div className={cx("avatar-container")}>
             <img
               src={avatar}
-              alt="Avatar"
               className={cx("avatar")}
             />
            
