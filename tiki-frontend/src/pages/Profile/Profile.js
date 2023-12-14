@@ -6,6 +6,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "../../redux/slide/userSlide";
 import { getBase64 } from "../../utils";
 import * as UserService from "../../services/UserService";
+import {
+  apiGetPublicProvinces,
+  apiGetPublicDistricts,
+} from "../../services/AppService";
 import { Empty } from "antd";
 
 const cx = classNames.bind(styles);
@@ -16,6 +20,10 @@ const Profile = () => {
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [avatar, setAvatar] = useState("");
+  const [provinces, setProvinces] = useState([]);
+  const [province, setProvince] = useState();
+  const [districts, setDistricts] = useState([]);
+  const [district, setDistrict] = useState();
   const mutation = useMutationHook((data) => {
     const { id, access_token, ...rests } = data;
     UserService.updateUser(id, rests, access_token);
@@ -39,6 +47,30 @@ const Profile = () => {
       console.log("Error: ", data);
     }
   }, [isSuccess, isError]);
+
+  useEffect(() => {
+    const fetchPublicProvince = async () => {
+      try {
+        const res = await apiGetPublicProvinces();
+        setProvinces(res?.data?.results);
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+    fetchPublicProvince();
+  }, []);
+
+  useEffect(() => {
+    const fetchPublicDistrict = async () => {
+      try {
+        const res = await apiGetPublicDistricts(province);
+        setDistricts(res?.data?.results);
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+    province && fetchPublicDistrict(province);
+  }, [province]);
 
   const handleGetDetailsUser = async (id, token) => {
     const res = await UserService.getDetailsUser(id, token);
@@ -79,95 +111,134 @@ const Profile = () => {
 
   return (
     <div>
-  <h1>Thông tin tài khoản</h1>
-  <div className={cx("customer-container")}>
-    {/* Cột bên trái - Thông tin cá nhân */}
-    <div className={cx("contents-container")}>
-      <h3>Thông tin cá nhân</h3>
-      <div className={cx("avatar-container")}>
-        <img
-          src= {avatar ? avatar : Empty}
-          alt= {avatar ? "avatar" : "empty"}
-          className={cx("avatar")}
-          onChange={() => handleOnchangeAvatar()}
-        />
+    <h1>Thông tin tài khoản</h1>
+    <div className={cx("customer-container")}>
+      {/* Cột bên trái - Thông tin cá nhân */}
+      <div className={cx("contents-container")}>
+        <h3>Thông tin cá nhân</h3>
+        <div className={cx("avatar-container")}>
+          <img
+            src="/static/media/pc.da3985e199b2bc4bc470.png"
+            alt="Avatar"
+            className={cx("avatar")}
+            onChange={() => handleOnchangeAvatar()}
+          />
+        </div>
+        <table className={cx("personal-info-table")}>
+          <tr>
+            <td>
+              <label>Tên</label>
+            </td>
+            <td>
+              <input
+                type="text"
+                value={name}
+                onChange={() => handleOnchangeName()}
+                className={cx("input-text")}
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label>Địa chỉ</label>
+            </td>
+            <td>
+              <input
+                type="text"
+                value={address ? address : "empty"}
+                className={cx("input-text")}
+                readOnly
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label>Tỉnh/Thành phố</label>
+            </td>
+            <td>
+              <select
+                value={province}
+                onChange={(e) => setProvince(e.target.value)}>
+                  <option value="">Chọn Tỉnh/Thành phố</option>
+                  {provinces.map((item) => {
+                    return (
+                      <option key={item?.province_id} value={item?.province_id}>
+                        {item?.province_name}
+                      </option>
+                    );
+                  })}
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label>Quận/Huyện</label>
+            </td>
+            <td>
+            <select
+                value={district}
+                onChange={(e) => setDistrict(e.target.value)}>
+                  <option value="">Chọn Quận/Huyện</option>
+                  {districts.map((item) => {
+                    return (
+                      <option key={item?.district_id} value={item?.district_id}>
+                        {item?.district_name}
+                      </option>
+                    );
+                  })}
+              </select>
+            </td>
+          </tr>
+        </table>
+        <div className={cx("centered-btn")}>
+          <button className={cx("save-btn")}>Lưu thay đổi</button>
+        </div>
       </div>
-      <table className={cx("personal-info-table")}>
-        <tr>
-          <td>
-            <label>Tên</label>
-          </td>
-          <td>
-            <input
-              type="text"
-              value={name}
-              onChange={() => handleOnchangeName()}
-              className={cx("input-text")}
-            />
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <label>Địa chỉ</label>
-          </td>
-          <td>
-            <input
-              type="text"
-              value={address ? address : "empty"}
-              className={cx("input-text")}
-              readOnly
-            />
-          </td>
-        </tr>
-      </table>
-      <div className={cx("centered-btn")}>
-        <button className={cx("save-btn")}>Lưu thay đổi</button>
+  
+      {/* Cột bên phải - Thông tin liên lạc và Bảo mật */}
+      <div className={cx("misc-container")}>
+        <table className={cx("contact-security-table")}>
+          <tr>
+            <th colSpan="2">
+              <h3>Thông tin liên lạc</h3>
+            </th>
+          </tr>
+          <tr>
+            <td>
+              Số điện thoại
+              <br />
+              {phone ? phone : "empty"}
+            </td>
+            <td>
+              <button className={cx("update-btn")}>Cập nhật</button>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Địa chỉ email
+              <br />
+              {user.email ? user.email : "empty"}
+            </td>
+            <td>
+              <button className={cx("update-btn")}>Cập nhật</button>
+            </td>
+          </tr>
+          <tr>
+            <th colSpan="2">
+              <h3>Bảo mật</h3>
+            </th>
+          </tr>
+          <tr>
+            <td>Đổi mật khẩu</td>
+            <td>
+              <button className={cx("update-btn")}>Cập nhật</button>
+            </td>
+          </tr>
+        </table>
       </div>
-    </div>
-
-    {/* Cột bên phải - Thông tin liên lạc và Bảo mật */}
-    <div className={cx("misc-container")}>
-      <table className={cx("contact-security-table")}>
-        <tr>
-          <th colSpan="2">
-            <h3>Thông tin liên lạc</h3>
-          </th>
-        </tr>
-        <tr>
-          <td>
-            Số điện thoại
-            <br />
-            {phone ? phone : "empty"}
-          </td>
-          <td>
-            <button className={cx("update-btn")}>Cập nhật</button>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Địa chỉ email
-            <br />
-            {user.email ? user.email : "empty"}
-          </td>
-          <td>
-            <button className={cx("update-btn")}>Cập nhật</button>
-          </td>
-        </tr>
-        <tr>
-          <th colSpan="2">
-            <h3>Bảo mật</h3>
-          </th>
-        </tr>
-        <tr>
-          <td>Đổi mật khẩu</td>
-          <td>
-            <button className={cx("update-btn")}>Cập nhật</button>
-          </td>
-        </tr>
-      </table>
     </div>
   </div>
-</div>
+  
 
   
 )
