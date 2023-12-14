@@ -16,6 +16,7 @@ import { useDebounce } from "../../../hooks";
 import { search } from "../../../apiServices/searchService";
 import Data from "../../../Data/Data";
 
+import * as searchService from "../../../apiServices/searchService";
 const cx = classNames.bind(styles); 
 
 function Search() {
@@ -30,25 +31,26 @@ function Search() {
     
     const [PData, setPData] = useState([]);
     useEffect(() => {
-        //if (!debounced.trim()) {
-        if (!searchValue.trim()) {
+        if (!debounced.trim()) {
+        //if (!searchValue.trim()) {
             setSearchResult([]);
             return;
         }
         
-        // const fetchApi = async () => {
-        //     const result = await search(debounced);
-        //     setSearchResult(result);
-        // } 
-        fetch('https://tiktok.fullstack.edu.vn/api/users/search?q=hoaa&type=less')
-        .then((res) => res.json())
-        .then((res) => {
-            setSearchResult(res.data);
-        })
-    }, [searchValue]);
-    // }, [debounced]);
-
+        const fetchApi = async () => {
+            const result = await searchService.search(debounced);
+            setSearchResult(result);
+        } 
+        fetchApi();
+    //     fetch('https://tiktok.fullstack.edu.vn/api/users/search?q=h&type=less')
+    //     .then((res) => res.json())
+    //     .then((res) => {
+    //         setSearchResult(res.data);
+    //     })
+    // }, [searchValue]);
+    }, [debounced]);
     
+
     const handleClear = () => {
         setSearchValue('');
         setSearchResult([]);
