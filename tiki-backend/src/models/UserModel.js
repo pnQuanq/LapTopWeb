@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema(
     address: { type: String, default: "" },
     avatar: { type: String },
     city: { type: String },
+    verify: { type: Boolean, default: false },
     cart: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Cart",
