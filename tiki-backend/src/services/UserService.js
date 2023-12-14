@@ -1,5 +1,9 @@
 const User = require("../models/UserModel");
 const bcrypt = require("bcrypt");
+const Token = require("../models/token");
+const crypto = require("crypto");
+const sendEmail = require("../utils/sendEmail");
+const EmailService = require("../services/EmailService");
 const { genneralAccessToken, genneralRefreshToken } = require("./JwtService");
 
 const createUser = (newUser) => {
@@ -22,7 +26,15 @@ const createUser = (newUser) => {
         password: hash,
         phone,
       });
+
+      const token = await new Token({
+        userId: createdUser._id,
+        token: crypto.randomBytes(32).toString("hex"),
+      }).save();
+      const url = `${process.env.BASE_URL}users/${createdUser.id}/verify/${token.token}`;
+
       if (createdUser) {
+        await EmailService.sendEmailVerifyUser(createdUser.email,url);
         resolve({
           status: "OK",
           message: "SUCCESS",
@@ -58,6 +70,18 @@ const loginUser = (userLogin) => {
           status: "ERR",
           message: "The password or user is incorrect",
         });
+      }
+
+      if (!checkUser.verified) {
+        let token = await Token.findOne({ userId: checkUser._id });
+        if (!token) {
+          token = await new Token({
+            userId: checkUser._id,
+            token: crypto.randomBytes(32).toString("hex"),
+          }).save();
+          const url = `${process.env.BASE_URL}users/${checkUser.id}/verify/${token.token}`;
+          await sendEmail(checkUser.email, "Verify Email", url);
+        }
       }
 
       const access_token = await genneralAccessToken({

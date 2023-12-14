@@ -6,6 +6,7 @@ const {
   authUserMiddleWare,
 } = require("../middleware/authMiddleware");
 
+router.get("/:id/verify/:token", userController.verifyEmail);
 router.post("/register", userController.createUser);
 router.post("/login", userController.loginUser);
 router.post("/log-out", userController.logoutUser);

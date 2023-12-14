@@ -1,4 +1,6 @@
+
 const routes = {
+  emailverify: "/users/:id/verify/:token",
   home: "/",
   order: "/order", //đơn hàng
   cart: "/cart", // giỏ hàng

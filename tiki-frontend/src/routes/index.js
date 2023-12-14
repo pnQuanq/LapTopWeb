@@ -1,5 +1,6 @@
 import config from "../config";
 
+import EmailVerify from "../pages/EmailVerify/emailVerify";
 import Home from "../pages/Home/Home";
 import OrderSuccess from "../pages/OrderSuccess/OrderSuccess";
 import Cart from "../pages/Cart/Cart";
@@ -22,6 +23,12 @@ import Profile from "../pages/Profile/Profile";
 import Payment from "../pages/Payment/Payment";
 
 const routes = [
+  {
+    path: config.routes.emailverify,
+    component: EmailVerify,
+    layout: Nothing,
+  },
+
   {
     path: config.routes.login,
     component: Login,

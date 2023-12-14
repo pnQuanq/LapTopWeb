@@ -2,6 +2,7 @@ const nodemailer = require("nodemailer");
 const dotenv = require("dotenv");
 dotenv.config();
 var inlineBase64 = require("nodemailer-plugin-inline-base64");
+const { text } = require("body-parser");
 
 const sendEmailCreateOrder = async (email, orderItems) => {
   let transporter = nodemailer.createTransport({
@@ -37,6 +38,29 @@ const sendEmailCreateOrder = async (email, orderItems) => {
   });
 };
 
+const sendEmailVerifyUser = async (email, text) => {
+  let transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true, // true for 465, false for other ports
+    auth: {
+      user: process.env.USER, // generated ethereal user
+      pass: process.env.PASS, // generated ethereal password
+    },
+  });
+  transporter.use("compile", inlineBase64({ cidPrefix: "somePrefix_" }));
+
+  // send mail with defined transport object
+  let info = await transporter.sendMail({
+    from: process.env.USER, // sender address
+    to: email, // list of receivers
+    subject: "Xác Nhận Tài Khoản LaptopWeb", // Subject line
+    text: text, // plain text body
+    html: `<div><b>Bạn đã đặt hàng thành công tại shop Lập trình thật dễ</b></div>`,
+  });
+};
+
 module.exports = {
   sendEmailCreateOrder,
+  sendEmailVerifyUser,
 };
