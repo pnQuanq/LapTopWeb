@@ -24,6 +24,7 @@ const Profile = () => {
   const [province, setProvince] = useState();
   const [districts, setDistricts] = useState([]);
   const [district, setDistrict] = useState();
+  const [isEditing, setIsEditing] = useState(false);
   const mutation = useMutationHook((data) => {
     const { id, access_token, ...rests } = data;
     UserService.updateUser(id, rests, access_token);
@@ -90,13 +91,17 @@ const Profile = () => {
     setAddress(value);
   };
 
-  const handleOnchangeAvatar = async ({ fileList }) => {
-    const file = fileList[0];
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
+  const handleOnchangeAvatar = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setAvatar(e.target.result);
+      };
+      reader.readAsDataURL(file);
     }
-    setAvatar(file.preview);
   };
+
   const handleUpdate = () => {
     mutation.mutate({
       id: user?.id,
@@ -109,91 +114,134 @@ const Profile = () => {
     });
   };
 
+    
+    setIsEditing(false);
+  };
+
+  const handleEdit = () => {
+    setIsEditing(true);
+  };
+
   return (
     <div>
-    <h1>Thông tin tài khoản</h1>
-    <div className={cx("customer-container")}>
-      {/* Cột bên trái - Thông tin cá nhân */}
-      <div className={cx("contents-container")}>
-        <h3>Thông tin cá nhân</h3>
-        <div className={cx("avatar-container")}>
-          <img
-            src="/static/media/pc.da3985e199b2bc4bc470.png"
-            alt="Avatar"
-            className={cx("avatar")}
-            onChange={() => handleOnchangeAvatar()}
-          />
-        </div>
-        <table className={cx("personal-info-table")}>
-          <tr>
-            <td>
-              <label>Tên</label>
-            </td>
-            <td>
-              <input
-                type="text"
-                value={name}
-                onChange={() => handleOnchangeName()}
-                className={cx("input-text")}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label>Địa chỉ</label>
-            </td>
-            <td>
-              <input
-                type="text"
-                value={address ? address : "empty"}
-                className={cx("input-text")}
-                readOnly
-              />
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label>Tỉnh/Thành phố</label>
-            </td>
-            <td>
-              <select
-                value={province}
-                onChange={(e) => setProvince(e.target.value)}>
+      <h1>Thông tin tài khoản</h1>
+      <div className={cx("customer-container")}>
+        {/* Cột bên trái - Thông tin cá nhân */}
+        <div className={cx("contents-container")}>
+          <h3>Thông tin cá nhân</h3>
+          <div className={cx("avatar-container")}>
+            <img
+              src={avatar}
+              alt="Avatar"
+              className={cx("avatar")}
+            />
+           
+          </div>
+          <table className={cx("personal-info-table")}>
+            <tr>
+              <td>
+                <label>Tên</label>
+              </td>
+              <td>
+                <input
+                  type="text"
+                  placeholder={name}
+                  onChange={() => handleOnchangeName}
+                  className={cx("input-text")}
+                  readOnly={!isEditing}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label>Địa chỉ</label>
+              </td>
+              <td>
+                <input
+                  type="text"
+                  placeholder={address}
+                  onChange={() => handleOnchangeAddress}
+                  className={cx("input-text")}
+                  readOnly={!isEditing}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label>Tỉnh/Thành phố</label>
+              </td>
+              <td>
+                <select
+                  value={province}
+                  onChange={(e) => setProvince(e.target.value)}
+                  disabled={!isEditing}
+                >
                   <option value="">Chọn Tỉnh/Thành phố</option>
-                  {provinces.map((item) => {
-                    return (
-                      <option key={item?.province_id} value={item?.province_id}>
-                        {item?.province_name}
-                      </option>
-                    );
-                  })}
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label>Quận/Huyện</label>
-            </td>
-            <td>
-            <select
-                value={district}
-                onChange={(e) => setDistrict(e.target.value)}>
+                  {provinces.map((item) => (
+                    <option
+                      key={item?.province_id}
+                      value={item?.province_id}
+                    >
+                      {item?.province_name}
+                    </option>
+                  ))}
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label>Quận/Huyện</label>
+              </td>
+              <td>
+                <select
+                  value={district}
+                  onChange={(e) => setDistrict(e.target.value)}
+                  disabled={!isEditing}
+                >
                   <option value="">Chọn Quận/Huyện</option>
-                  {districts.map((item) => {
-                    return (
-                      <option key={item?.district_id} value={item?.district_id}>
-                        {item?.district_name}
-                      </option>
-                    );
-                  })}
-              </select>
-            </td>
-          </tr>
-        </table>
-        <div className={cx("centered-btn")}>
-          <button className={cx("save-btn")}>Lưu thay đổi</button>
+                  {districts.map((item) => (
+                    <option
+                      key={item?.district_id}
+                      value={item?.district_id}
+                    >
+                      {item?.district_name}
+                    </option>
+                  ))}
+                </select>
+              </td>
+            </tr>
+          </table>
+          <div className={cx("centered-btn")}>
+            {isEditing && (
+              <button className={cx("file-input-label")} onClick={() => {
+                document.getElementById("selectAvatar").click();
+              }}>
+                Chọn ảnh
+                <input id="selectAvatar"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleOnchangeAvatar}
+                  className={cx("file-input")}
+                  hidden
+                />
+              </button>
+            )}
+            {isEditing ? (
+              <>
+                <button className={cx("save-btn")} onClick={handleSaveChanges}>
+                  Lưu thay đổi
+                </button>
+                <button className={cx("cancel-btn")} onClick={handleCancelChanges}>
+                  Hủy
+                </button>
+              </>
+            ) : (
+              <button className={cx("edit-btn")} onClick={handleEdit}>
+                Sửa thông tin
+              </button>
+            )}
+          </div>
         </div>
-      </div>
   
       {/* Cột bên phải - Thông tin liên lạc và Bảo mật */}
       <div className={cx("misc-container")}>
@@ -237,11 +285,7 @@ const Profile = () => {
         </table>
       </div>
     </div>
-  </div>
-  
-
-  
-)
-};
+  </div> 
+)};
 
 export default Profile;
