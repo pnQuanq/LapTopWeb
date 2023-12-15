@@ -159,7 +159,6 @@ const Profile = () => {
       phone,
       access_token: user?.access_token,
     });
-      alert("Cập nhật số điện thoại thành công!")
       setShowUpdatePhoneForm(false);
     } 
     else {
@@ -172,11 +171,19 @@ const Profile = () => {
   };
 
   const handleUpdateEmail = () => {
-    mutation.mutate({
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (emailRegex.test(email))
+    {
+      mutation.mutate({
       id: user?.id,
       email,
       access_token: user?.access_token,
     });
+      setShowUpdateEmailForm(false);
+    } 
+    else {
+      alert("Email không đúng định dạng!")
+    }
   }
 
   const handleShowPasswordForm = () => {
@@ -394,8 +401,9 @@ const Profile = () => {
           <div>
             <label>Nhập email mới:</label>
             <input type="text" value={email} onChange={ (e) => handleOnchangeEmail(e.target.value)}/>
-            <button onClick={() => setShowUpdateEmailForm(false)}>Hủy bỏ</button>
-            <button onClick={() => setShowUpdateEmailForm(false)}>Cập nhật</button>
+            <button onClick={() => {setShowUpdateEmailForm(false)
+            handleCancelChanges()}}>Hủy bỏ</button>
+            <button onClick={() => handleUpdateEmail()}>Cập nhật</button>
           </div>
         </Modal>
       )}
