@@ -20,11 +20,13 @@ const Profile = () => {
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [avatar, setAvatar] = useState("");
+  const [city, setCity] = useState("");
   const [provinces, setProvinces] = useState([]);
   const [province, setProvince] = useState();
   const [districts, setDistricts] = useState([]);
   const [district, setDistrict] = useState();
   const [isEditing, setIsEditing] = useState(false);
+
   const mutation = useMutationHook((data) => {
     const { id, access_token, ...rests } = data;
     UserService.updateUser(id, rests, access_token);
@@ -39,7 +41,20 @@ const Profile = () => {
     setPhone(user?.phone);
     setAddress(user?.address);
     setAvatar(user?.avatar);
+    setCity(user?.city);
   }, [user]);
+
+  const resetFields = () => {
+    setEmail(user?.email || "");
+    setName(user?.name || "");
+    setPhone(user?.phone || "");
+    setAddress(user?.address || "");
+    setAvatar(user?.avatar || "");
+    setCity(user?.city || "");
+    setProvince(province || "");
+    setDistrict(district || "");
+  };
+  
 
   useEffect(() => {
     if (isSuccess) {
@@ -73,6 +88,16 @@ const Profile = () => {
     province && fetchPublicDistrict(province);
   }, [province]);
 
+  useEffect(() => {
+    // Phân tích giá trị city thành province_id và district_id
+    const [parsedProvince, parsedDistrict] = city.split(" ");
+    
+    // Cập nhật giá trị select
+    setProvince(parsedProvince);
+    setDistrict(parsedDistrict);  
+
+  }, [city]);
+
   const handleGetDetailsUser = async (id, token) => {
     const res = await UserService.getDetailsUser(id, token);
     dispatch(updateUser({ ...res?.data, access_token: token }));
@@ -102,6 +127,20 @@ const Profile = () => {
     }
   };
 
+  const handleProvinceChange = (e) => {
+    const selectedProvince = e.target.value;
+    setProvince(selectedProvince);
+
+    setCity(`${selectedProvince} ${district}`);
+  };
+
+  const handleDistrictChange = (e) => {
+    const selectedDistrict = e.target.value;
+    setDistrict(selectedDistrict);
+
+    setCity(`${province} ${selectedDistrict}`);
+  };
+
   const handleUpdate = () => {
     mutation.mutate({
       id: user?.id,
@@ -110,18 +149,20 @@ const Profile = () => {
       phone,
       address,
       avatar,
+      city,
       access_token: user?.access_token,
     });
   };
 
   const handleSaveChanges = () => {
-    // Add logic to save changes to backend or state
+    
+    handleUpdate();
     setIsEditing(false);
   };
 
   const handleCancelChanges = () => {
-    
     setIsEditing(false);
+    resetFields();
   };
 
   const handleEdit = () => {
@@ -149,12 +190,13 @@ const Profile = () => {
               </td>
               <td>
                 <input
-                  type="text"
-                  placeholder={name}
-                  onChange={() => handleOnchangeName}
-                  className={cx("input-text")}
-                  readOnly={!isEditing}
-                />
+                type="text"
+                value={name}
+                placeholder={name}
+                onChange={(e) => handleOnchangeName(e.target.value)}
+                className={cx("input-text")}
+                readOnly={!isEditing}
+              />  
               </td>
             </tr>
             <tr>
@@ -162,13 +204,15 @@ const Profile = () => {
                 <label>Địa chỉ</label>
               </td>
               <td>
-                <input
-                  type="text"
-                  placeholder={address}
-                  onChange={() => handleOnchangeAddress}
-                  className={cx("input-text")}
-                  readOnly={!isEditing}
-                />
+              <input
+              type="text"
+              value={address}
+              placeholder={address}
+              onChange={(e) => handleOnchangeAddress(e.target.value)}
+              className={cx("input-text")}
+              readOnly={!isEditing}
+              />
+
               </td>
             </tr>
             <tr>
@@ -177,19 +221,16 @@ const Profile = () => {
               </td>
               <td>
                 <select
-                  value={province}
-                  onChange={(e) => setProvince(e.target.value)}
-                  disabled={!isEditing}
+                value={province}
+                onChange={handleProvinceChange}
+                disabled={!isEditing}
                 >
-                  <option value="">Chọn Tỉnh/Thành phố</option>
-                  {provinces.map((item) => (
-                    <option
-                      key={item?.province_id}
-                      value={item?.province_id}
-                    >
-                      {item?.province_name}
-                    </option>
-                  ))}
+                <option value="">Chọn Tỉnh/Thành phố</option>
+                {provinces.map((item) => (
+                  <option key={item?.province_id} value={item?.province_id}>
+                    {item?.province_name}
+                  </option>
+                ))}
                 </select>
               </td>
             </tr>
@@ -200,15 +241,12 @@ const Profile = () => {
               <td>
                 <select
                   value={district}
-                  onChange={(e) => setDistrict(e.target.value)}
+                  onChange={handleDistrictChange}
                   disabled={!isEditing}
-                >
+                  >
                   <option value="">Chọn Quận/Huyện</option>
                   {districts.map((item) => (
-                    <option
-                      key={item?.district_id}
-                      value={item?.district_id}
-                    >
+                    <option key={item?.district_id} value={item?.district_id}>
                       {item?.district_name}
                     </option>
                   ))}
