@@ -11,6 +11,7 @@ import {
   apiGetPublicDistricts,
 } from "../../services/AppService";
 import { Empty } from "antd";
+import Modal from "./Modal";
 
 const cx = classNames.bind(styles);
 const Profile = () => {
@@ -26,6 +27,9 @@ const Profile = () => {
   const [districts, setDistricts] = useState([]);
   const [district, setDistrict] = useState();
   const [isEditing, setIsEditing] = useState(false);
+  const [showUpdateEmailForm, setShowUpdateEmailForm] = useState(false);
+  const [showUpdatePhoneForm, setShowUpdatePhoneForm] = useState(false);
+  const [showChangePasswordForm, setShowChangePasswordForm] = useState(false);
 
   const mutation = useMutationHook((data) => {
     const { id, access_token, ...rests } = data;
@@ -139,6 +143,21 @@ const Profile = () => {
     setDistrict(selectedDistrict);
 
     setCity(`${province} ${selectedDistrict}`);
+  };
+
+  const handleUpdateEmail = () => {
+    setShowUpdateEmailForm(true);
+    // Nếu cần, thực hiện các bước khác để chuẩn bị form cập nhật email
+  };
+
+  const handleUpdatePhone = () => {
+    setShowUpdatePhoneForm(true);
+    // Nếu cần, thực hiện các bước khác để chuẩn bị form cập nhật số điện thoại
+  };
+
+  const handleChangePassword = () => {
+    setShowChangePasswordForm(true);
+    // Nếu cần, thực hiện các bước khác để chuẩn bị form đổi mật khẩu
   };
 
   const handleUpdate = () => {
@@ -301,7 +320,7 @@ const Profile = () => {
               {phone ? phone : "empty"}
             </td>
             <td>
-              <button className={cx("update-btn")}>Cập nhật</button>
+              <button className={cx("update-btn")} onClick={handleUpdatePhone}>Cập nhật</button>
             </td>
           </tr>
           <tr>
@@ -311,7 +330,7 @@ const Profile = () => {
               {user.email ? user.email : "empty"}
             </td>
             <td>
-              <button className={cx("update-btn")}>Cập nhật</button>
+              <button className={cx("update-btn")} onClick={handleUpdateEmail}>Cập nhật</button>
             </td>
           </tr>
           <tr>
@@ -322,11 +341,55 @@ const Profile = () => {
           <tr>
             <td>Đổi mật khẩu</td>
             <td>
-              <button className={cx("update-btn")}>Cập nhật</button>
+              <button className={cx("update-btn")} onClick={handleChangePassword}>Cập nhật</button>
             </td>
           </tr>
         </table>
+
+        <div>
+
+      {/* Form cập nhật số điện thoại */}
+      {showUpdatePhoneForm && (
+        <Modal title="Cập nhật số điện thoại" onClose={() => setShowUpdatePhoneForm(false)}>
+          <div>
+            <label>Nhập số điện thoại mới:</label>
+            <input type="text" value={phone} onChange={ (e) => handleOnchangePhone(e.target.value)}/>
+            <button onClick={() => setShowUpdatePhoneForm(false)}>Hủy bỏ</button>
+            <button onClick={() => setShowUpdatePhoneForm(false)}>Cập nhật</button>
+          </div>
+        </Modal>
+      )}
+
+      {/* Form cập nhật email */}
+      {showUpdateEmailForm && (
+        <Modal title="Cập nhật email" onClose={() => setShowUpdateEmailForm(false)}>
+          <div>
+            <label>Nhập email mới:</label>
+            <input type="text" value={email} onChange={ (e) => handleOnchangeEmail(e.target.value)}/>
+            <button onClick={() => setShowUpdateEmailForm(false)}>Hủy bỏ</button>
+            <button onClick={() => setShowUpdateEmailForm(false)}>Cập nhật</button>
+          </div>
+        </Modal>
+      )}
+
+      {/* Form đổi mật khẩu */}
+      {showChangePasswordForm && (
+        <Modal title="Đổi mật khẩu" onClose={() => setShowChangePasswordForm(false)}>
+          <div>
+            <label>Nhập mật khẩu cũ:</label>
+            <input type="password" />
+            <label>Nhập mật khẩu mới:</label>
+            <input type="password" />
+            <label>Xác nhận mật khẩu mới:</label>
+            <input type="password" />
+            <button onClick={() => setShowChangePasswordForm(false)}>Hủy bỏ</button>
+            <button onClick={() => setShowChangePasswordForm(false)}>Cập nhật</button>
+          </div>
+        </Modal>
+      )}
+    </div>
       </div>
+        
     </div>
   </div> 
 )};
