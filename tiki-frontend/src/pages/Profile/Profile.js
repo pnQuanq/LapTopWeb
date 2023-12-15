@@ -145,20 +145,47 @@ const Profile = () => {
     setCity(`${province} ${selectedDistrict}`);
   };
 
-  const handleUpdateEmail = () => {
+  const handleShowEmailForm = () => {
     setShowUpdateEmailForm(true);
-    // Nếu cần, thực hiện các bước khác để chuẩn bị form cập nhật email
+
   };
 
   const handleUpdatePhone = () => {
+    const phoneRegex = /^0[0-9]{9}$/;
+    if (phoneRegex.test(phone))
+    {
+      mutation.mutate({
+      id: user?.id,
+      phone,
+      access_token: user?.access_token,
+    });
+      alert("Cập nhật số điện thoại thành công!")
+      setShowUpdatePhoneForm(false);
+    } 
+    else {
+      alert("Số điện thoại phải gồm 10 chữ số và bắt đầu bằng chữ số 0!")
+    }
+  }
+
+  const handleShowPhoneForm = () => {
     setShowUpdatePhoneForm(true);
-    // Nếu cần, thực hiện các bước khác để chuẩn bị form cập nhật số điện thoại
   };
 
-  const handleChangePassword = () => {
+  const handleUpdateEmail = () => {
+    mutation.mutate({
+      id: user?.id,
+      email,
+      access_token: user?.access_token,
+    });
+  }
+
+  const handleShowPasswordForm = () => {
     setShowChangePasswordForm(true);
-    // Nếu cần, thực hiện các bước khác để chuẩn bị form đổi mật khẩu
   };
+
+  const handleUpdatePassword = () => {
+    
+  }
 
   const handleUpdate = () => {
     mutation.mutate({
@@ -320,7 +347,7 @@ const Profile = () => {
               {phone ? phone : "empty"}
             </td>
             <td>
-              <button className={cx("update-btn")} onClick={handleUpdatePhone}>Cập nhật</button>
+              <button className={cx("update-btn")} onClick={handleShowPhoneForm}>Cập nhật</button>
             </td>
           </tr>
           <tr>
@@ -330,7 +357,7 @@ const Profile = () => {
               {user.email ? user.email : "empty"}
             </td>
             <td>
-              <button className={cx("update-btn")} onClick={handleUpdateEmail}>Cập nhật</button>
+              <button className={cx("update-btn")} onClick={handleShowEmailForm}>Cập nhật</button>
             </td>
           </tr>
           <tr>
@@ -341,7 +368,7 @@ const Profile = () => {
           <tr>
             <td>Đổi mật khẩu</td>
             <td>
-              <button className={cx("update-btn")} onClick={handleChangePassword}>Cập nhật</button>
+              <button className={cx("update-btn")} onClick={handleShowPasswordForm}>Cập nhật</button>
             </td>
           </tr>
         </table>
@@ -354,8 +381,9 @@ const Profile = () => {
           <div>
             <label>Nhập số điện thoại mới:</label>
             <input type="text" value={phone} onChange={ (e) => handleOnchangePhone(e.target.value)}/>
-            <button onClick={() => setShowUpdatePhoneForm(false)}>Hủy bỏ</button>
-            <button onClick={() => setShowUpdatePhoneForm(false)}>Cập nhật</button>
+            <button onClick={() => {setShowUpdatePhoneForm(false);
+            handleCancelChanges()}}>Hủy bỏ</button>
+            <button onClick={() => handleUpdatePhone()}>Cập nhật</button>
           </div>
         </Modal>
       )}
