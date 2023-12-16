@@ -30,6 +30,8 @@ const Profile = () => {
   const [showUpdateEmailForm, setShowUpdateEmailForm] = useState(false);
   const [showUpdatePhoneForm, setShowUpdatePhoneForm] = useState(false);
   const [showChangePasswordForm, setShowChangePasswordForm] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
 
   const mutation = useMutationHook((data) => {
     const { id, access_token, ...rests } = data;
@@ -57,6 +59,8 @@ const Profile = () => {
     setCity(user?.city || "");
     setProvince(province || "");
     setDistrict(district || "");
+    setNewPassword("");
+    setConfirmNewPassword("");
   };
   
 
@@ -190,8 +194,20 @@ const Profile = () => {
     setShowChangePasswordForm(true);
   };
 
-  const handleUpdatePassword = () => {
-    
+  const handleUpdatePassword = async() => {
+    if (confirmNewPassword!=newPassword)
+      alert("Xác nhận mật khẩu mới không khớp!");
+    else
+    {
+      mutation.mutate(
+        {
+          id: user?.id,
+          password: newPassword,
+          acccess_token: user?.acccess_token,
+        }
+      )
+      setShowChangePasswordForm(false);
+    }
   }
 
   const handleUpdate = () => {
@@ -412,14 +428,13 @@ const Profile = () => {
       {showChangePasswordForm && (
         <Modal title="Đổi mật khẩu" onClose={() => setShowChangePasswordForm(false)}>
           <div>
-            <label>Nhập mật khẩu cũ:</label>
-            <input type="password" />
-            <label>Nhập mật khẩu mới:</label>
-            <input type="password" />
+            <label>Nhập mật khẩu mới: </label>
+            <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)}/>
             <label>Xác nhận mật khẩu mới:</label>
-            <input type="password" />
-            <button onClick={() => setShowChangePasswordForm(false)}>Hủy bỏ</button>
-            <button onClick={() => setShowChangePasswordForm(false)}>Cập nhật</button>
+            <input type="password" value={confirmNewPassword} onChange={(e) => setConfirmNewPassword(e.target.value)}/>
+            <button onClick={() => {setShowChangePasswordForm(false)
+              handleCancelChanges()}}>Hủy bỏ</button>
+            <button onClick={() => handleUpdatePassword()}>Cập nhật</button>
           </div>
         </Modal>
       )}

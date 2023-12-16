@@ -96,6 +96,12 @@ const updateUser = (id, data) => {
         });
       }
 
+      if (data.password) {
+        const saltRounds = 10;
+        const hashedPassword = await bcrypt.hash(data.password, saltRounds);
+        data.password = hashedPassword;
+      }
+
       const updatedUser = await User.findByIdAndUpdate(id, data, { new: true });
       resolve({
         status: "OK",
