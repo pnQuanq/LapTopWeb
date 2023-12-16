@@ -16,6 +16,8 @@ import { Tooltip } from "react-tippy";
 import { resetUser } from "../../../redux/slide/userSlide";
 import { resetState } from "../../../redux/slide/cartSlide";
 
+import Search from "../Search";
+
 const cx = classNames.bind(styles);
 
 const Header = () => {
@@ -70,13 +72,14 @@ const Header = () => {
             height="72"
           />
         </Link>
-        <div className={cx("search")}>
+        {/* <div className={cx("search")}>
           <input placeholder="Tìm sản phẩm" spellCheck={false} />
           <span>|</span>
           <button className={cx("search-btn")}>
             <FontAwesomeIcon icon={faMagnifyingGlass} />
           </button>
-        </div>
+        </div> */}
+        <Search />
         <div className={cx("actions")}>
           <div
             className={cx("user")}
