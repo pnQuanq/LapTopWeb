@@ -12,40 +12,43 @@ const cx = classNames.bind(styles)
 function AccountItem({ data }) {
 
     //*********** test w/ fake data ***********
-    // const navigate = useNavigate();
-    // const handleDetail = () => {
-    //     navigate("/productdetail", {
-    //       replace: false,
-    //       state: {
-    //         id: data.id,
-    //         name: data.name,
-    //         image: data.image,
-    //       },
-    //     });
-    // };
+    const navigate = useNavigate();
+    const handleDetail = (id) => {
+        navigate("/productdetail/", {
+          replace: false,
+          state: {
+            id: data.id,
+            name: data.name,
+            image: data.image,
+          },
+        });
+    };
+    const handleDetailProduct = (id) => {
+        navigate(`/productdetail/${id}`);
+      };
     //******************************************
 
     return (
-        <Link to={'/@${data.name}'} className={cx('wrapper')}>
-            <FontAwesomeIcon icon={faMagnifyingGlass} />
-            <div className={cx('info')}>
-                <h4 className={cx('name')}>
-                    <span>{data.full_name}</span>
-                    {data.tick && <FontAwesomeIcon icon={faCheckCircle} />}
-                </h4>
-                <span className={cx('username')}>{data.nickname}</span>
-            </div>
-        </Link>
-
-        //*********** test w/ fake data ***********
-        // <Link to={'/@${data.name}'} className={cx('wrapper')} onClick={handleDetail}>
-        //     <FontAwesomeIcon icon={faMagnifyingGlass} key={data.id}/>
+        // <Link to={'/@${data.name}'} className={cx('wrapper')}>
+        //     <FontAwesomeIcon icon={faMagnifyingGlass} />
         //     <div className={cx('info')}>
         //         <h4 className={cx('name')}>
         //             <span>{data.full_name}</span>
+        //             {data.tick && <FontAwesomeIcon icon={faCheckCircle} />}
         //         </h4>
+        //         <span className={cx('username')}>{data.nickname}</span>
         //     </div>
         // </Link>
+
+        //*********** test w/ fake data ***********
+        <Link  className={cx('wrapper')} onClick={() => handleDetailProduct(data._id)}>
+            <FontAwesomeIcon icon={faMagnifyingGlass} key={data._id}/>
+            <div className={cx('info')}>
+                <h4 className={cx('name')}>
+                    <span>{data.name}</span>
+                </h4>
+            </div>
+        </Link>
         //*****************************************
     );
 }

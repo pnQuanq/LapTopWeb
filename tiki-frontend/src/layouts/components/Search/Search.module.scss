@@ -27,6 +27,7 @@
 }
 .search-result{
     width: 830px;
+    height: fit-content;
     .search-title{
         margin-left: 10px;
     }
@@ -66,4 +67,26 @@
     &:active{
         background-color: #acacb0;
     }
+}
+
+.wrapper{
+    display: flex;
+    align-items: center;
+    padding: 6px 16px;
+    cursor: pointer;
+
+    &:hover {
+        background: rgba(22, 24, 35, 0.03);
+        color: #bc0093;
+    }
+}
+
+.info{
+    flex: 1;
+    margin-left: 12px;
+}
+
+.name{
+    font-size: 1.6rem;
+    font-weight: 600;
 }
