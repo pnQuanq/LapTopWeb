@@ -11,6 +11,8 @@ import {
 import { useMutationHook } from "../../hooks/useMutationHook";
 
 import * as OrderService from "../../services/OrderService";
+import * as UserService from "../../services/UserService";
+import { resetState } from "../../redux/slide/cartSlide";
 
 const cx = classNames.bind(styles);
 
@@ -27,44 +29,30 @@ const Payment = () => {
     // Add more delivery methods as needed
   ];
 
-  const [Data, setData] = useState([]);
   const [deliveryMethod, setDeliveryMethod] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState(null);
   const [shippingFee, setShippingFee] = useState(0);
-  const [priceMemo, setPriceMemo] = useState(0);
-  const [totalPrice, setTotalPrice] = useState(0);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [provinces, setProvinces] = useState([]);
   const [province, setProvince] = useState();
   const [districts, setDistricts] = useState([]);
   const [district, setDistrict] = useState();
 
-  const order = useSelector((state) => state.order);
   const user = useSelector((state) => state.user);
-  const [name, setName] = useState(user.name);
+  const cart = useSelector((state) => state.cart);
+  const [detailAddress, setDetailAddress] = useState();
   const [address, setAddress] = useState(user.address);
   const [phone, setPhone] = useState(user.phone);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { orderItems } = order;
 
   const numberFormat = new Intl.NumberFormat("en-US");
-
-  useEffect(() => {
-    if (orderItems) {
-      setData(orderItems);
-      setData((prev) => {
-        const newData = prev.map((item) => {
-          return {
-            ...item,
-            total: item.price * item.amount,
-          };
-        });
-        return newData;
-      });
-    }
-  }, [orderItems]);
-  console.log("Data ", Data);
+  const mutationAddOrder = useMutationHook((data) => {
+    const { token, ...rests } = data;
+    const res = OrderService.createOrder({ ...rests }, token);
+    return res;
+  });
+  const { isSuccess } = mutationAddOrder;
 
   useEffect(() => {
     const fetchPublicProvince = async () => {
@@ -91,13 +79,13 @@ const Payment = () => {
   }, [province]);
 
   useEffect(() => {
-    const total = Data.reduce((acc, item) => {
-      return acc + item.total;
-    }, 0);
-
-    setTotalPrice(total + shippingFee);
-    setPriceMemo(total);
-  }, [Data, shippingFee]);
+    if (isSuccess && mutationAddOrder.data.status === "OK") {
+      alert("Đặt hàng thành công");
+      dispatch(resetState());
+      UserService.deleteAllUserCart(user?.id, user?.access_token);
+      navigate("/");
+    }
+  }, [isSuccess]);
 
   const handleDeliveryMethodChange = (selectedMethod) => {
     setDeliveryMethod(selectedMethod);
@@ -128,22 +116,23 @@ const Payment = () => {
     } else {
       if (address === "" || phone === "") {
         alert("Please add your address and phone number");
+      } else if (paymentMethod === "online") {
+        alert("Chức năng thanh toán online đang được phát triển");
       } else {
         mutationAddOrder.mutate({
           token: user?.access_token,
-          orderItems: order?.orderItems,
+          orderItems: cart?.products,
           fullName: user?.name,
           address: address,
           phone: phone,
           city: province,
           paymentMethod: paymentMethod,
-          itemsPrice: priceMemo,
+          itemsPrice: cart?.cartTotal,
           shippingPrice: shippingFee,
-          totalPrice: totalPrice,
+          totalPrice: cart?.cartTotal + shippingFee,
           user: user?.id,
           email: user?.email,
         });
-        alert("Đặt hàng thành công", navigate("/ordersuccess"));
       }
     }
   };
@@ -152,6 +141,8 @@ const Payment = () => {
   };
   const handleOk = () => {
     setIsOpenModal(false);
+    const address = detailaddress() + " " + detailAddress;
+    setAddress(address);
   };
   const handleCancel = () => {
     setIsOpenModal(false);
@@ -161,8 +152,8 @@ const Payment = () => {
     setPhone(e.target.value);
   };
   const handleOnChangeDetailAddress = (e) => {
-    const address = detailaddress() + " " + e.target.value;
-    setAddress(address);
+    const detailAdress = e.target.value;
+    setDetailAddress(detailAdress);
   };
   const detailaddress = () => {
     if (province && district) {
@@ -173,12 +164,6 @@ const Payment = () => {
       }`;
     }
   };
-
-  const mutationAddOrder = useMutationHook((data) => {
-    const { token, ...rests } = data;
-    const res = OrderService.createOrder({ ...rests }, token);
-    return res;
-  });
 
   return (
     <div className={cx("container")}>
@@ -242,7 +227,7 @@ const Payment = () => {
         </div>
         <div className={cx("firm")}>
           <div className={cx("price-content")}>
-            <div className={cx("location")} style={{}}>
+            <div className={cx("location")}>
               <p>Địa chỉ: {address ? address : "empty"} </p>
               <p
                 style={{ color: "#1890ff", cursor: "pointer" }}
@@ -251,13 +236,13 @@ const Payment = () => {
                 thay đổi
               </p>
             </div>
-            <div className={cx("phone")} style={{}}>
+            <div className={cx("phone")}>
               <p>Số điện thoại: {phone ? phone : "empty"} </p>
             </div>
             <div className={cx("price-detail")}>
               <lable className={cx("lable")}>
                 Tạm tính:
-                <lable>{numberFormat.format(priceMemo)}VNĐ</lable>
+                <lable>{numberFormat.format(cart?.cartTotal)}VNĐ</lable>
               </lable>
               <lable className={cx("lable")}>
                 Giảm giá:
@@ -271,7 +256,7 @@ const Payment = () => {
             <div className={cx("price-total")}>
               <p>Tổng cộng:</p>
               <p className={cx("total")}>
-                {numberFormat.format(totalPrice + 30000)}VNĐ
+                {numberFormat.format(cart?.cartTotal + shippingFee)}VNĐ
               </p>
             </div>
           </div>
@@ -300,16 +285,16 @@ const Payment = () => {
           <div>
             <div className={cx("modal-input")}>
               <p>Name:</p>
-              <input type="text" value={name} name="name" />
+              <input type="text" value={user.name} name="name" />
             </div>
 
             <div className={cx("modal-input")}>
               <p>Phone:</p>
               <input
-                type="text"
+                type="number"
                 value={phone}
                 onChange={handleOnChangePhone}
-                name="name"
+                name="phone"
               />
             </div>
             <div className={cx("modal-input")}>
@@ -349,7 +334,7 @@ const Payment = () => {
               <input
                 type="text"
                 onChange={(e) => handleOnChangeDetailAddress(e)}
-                name="name"
+                name="detail"
               />
             </div>
           </div>

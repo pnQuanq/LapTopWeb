@@ -84,7 +84,9 @@ const Register = () => {
 
   useEffect(() => {
     if (isSuccess && mutation.data.status === "OK") {
-      alert("Đăng ký thành công");
+      setTimeout(() => {
+        alert("Đăng ký thành công");
+      }, 1000);
       console.log(mutation.data.status);
       navigate("/login");
     } else if (isSuccess && mutation.data.status === "ERR") {
@@ -100,9 +102,8 @@ const Register = () => {
   const handleLogin = () => {
     navigate("/login");
   };
-
   return (
-    <div className={cx("wrapper")}>
+    <div className={cx("container")}>
       <div className={cx("inner")}>
         <div className={cx("form-box-register")}>
           <h2>Register</h2>
