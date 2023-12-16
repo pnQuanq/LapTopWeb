@@ -10,6 +10,7 @@ import classNames from "classnames/bind";
 import { Menu } from "antd";
 import AdminUser from "./Component/User/User";
 import Product from "./Component/Product/Product";
+import Order from "./Component/Order/Order";
 const cx = classNames.bind(styles);
 
 const Admin = () => {
@@ -43,7 +44,7 @@ const Admin = () => {
       case "product":
         return <Product />;
       case "order":
-        return <div>Đơn hàng</div>;
+        return <Order />;
       default:
         return <></>;
     }

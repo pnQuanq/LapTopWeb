@@ -16,17 +16,24 @@ router.post(
 );
 router.get("/get-cart-user/:id", userController.getUserCart);
 
+router.put(
+  "/update-cart-user/:id/:idProduct",
+  authUserMiddleWare,
+  userController.updateUserCart
+);
+
 router.delete(
   "/delete-cart-user/:id/:idProduct",
   authUserMiddleWare,
   userController.deleteProductUserCart
 );
 
-router.put(
-  "/update-cart-user/:id/:idProduct",
+router.delete(
+  "/delete-all-cart-user/:id",
   authUserMiddleWare,
-  userController.updateUserCart
+  userController.deleteAllProductInCart
 );
+
 router.get("/get-cart-user/:id", userController.getUserCart);
 
 router.put("/update-user/:id", authUserMiddleWare, userController.updateUser);
