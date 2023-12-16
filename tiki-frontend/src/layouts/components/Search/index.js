@@ -8,145 +8,18 @@ import {
 import Tippy from '@tippyjs/react/headless';
 import { Wrapper as PopperWrapper} from "../../../components/Popper";
 import 'tippy.js/dist/tippy.css';
-//import AccountItem from "../AccountItem";
+
 import classNames from "classnames/bind";
 import styles from "./Search.module.scss";
 import { useDebounce } from "../../../hooks";
  
-//import { search } from "../../../apiServices/searchService";
-//import Data from "../../../Data/Data";
 
-//import * as searchService from "../../../apiServices/searchService";
 import * as ProductService from "../../../services/ProductService";
 import { useNavigate } from "react-router-dom";
 
 const cx = classNames.bind(styles); 
 
-// function Search() {
 
-//     const [searchValue, setSearchValue] = useState('');
-//     const [searchResult, setSearchResult] = useState([]);
-//     const [showResult, setShowResult] = useState(true);
-
-//     const debounced = useDebounce(searchValue, 500);
-
-//     const inputRef = useRef();
-    
-//     const [PData, setPData] = useState([]);
-//     // useEffect(() => {
-//     //     if (!debounced.trim()) {
-//     //     //if (!searchValue.trim()) {
-//     //         setSearchResult([]);
-//     //         return;
-//     //     }
-        
-//     //     const fetchApi = async () => {
-//     //         const result = await searchService.search(debounced);
-//     //         setSearchResult(result);
-//     //     } 
-//     //     fetchApi();
-//     // //     fetch('https://tiktok.fullstack.edu.vn/api/users/search?q=${encodeURIComponent(searchValue)}&type=less')
-//     // //     .then((res) => res.json())
-//     // //     .then((res) => {
-//     // //         setSearchResult(res.data);
-//     // //     })
-//     // // }, [searchValue]);
-//     // }, [debounced]);
-
-//     //*********************************************** */
-//     const fetchProductAll = async () => {
-//         try {
-//           const res = await ProductService.getAllProduct();
-          
-//         } catch (error) {
-//           console.error("Error fetching data:", error);
-//         }
-//     };
-//     useEffect(() => {
-//         const fetchData = async () => {
-//           try {
-//             const result = await fetchProductAll();
-//             //setPData(result.data);
-//             setSearchResult(result.data);
-//           } catch (error) {
-//             console.log("error", error);
-//           }
-//         };
-    
-//         fetchData();
-//         console.log("PData:", PData);
-//       }, []);
-//     //*********************************************** */
-
-
-
-//     //*********************************************** */
-//     const handleClear = () => {
-//         setSearchValue('');
-//         setSearchResult([]);
-//         inputRef.current.focus();
-//     };
-
-//     const handleHideResult = () => {
-//         setShowResult(false);
-//     };
-
-//     return (
-//         //********* handle search result *********
-//         <Tippy 
-//             interactive
-//             visible={showResult && searchResult.length > 0}
-//             render={attrs => (
-            
-//                 <div className={cx('search-result')} tabIndex="-1" {...attrs}>
-//                 <PopperWrapper>
-//                     <h4 className={cx('search-title')}>Products</h4>
-//                     {searchResult.map((result) => (
-//                         <AccountItem key={result.id} data={result} />
-//                     ))}
-//                 </PopperWrapper>
-//                 </div>
-//             )}
-//             onClickOutside={handleHideResult}
-//         >
-//             {/* get user input in Search Bar */}
-//             <div className={cx("search")}>
-//                 <input 
-//                     ref={inputRef}
-//                     value={searchValue}
-//                     placeholder="Tìm sản phẩm" 
-//                     spellCheck={false} 
-//                     onChange={(e) => setSearchValue(e.target.value)}
-//                     onFocus={() => setShowResult(true)}
-//                 />
-//                 {!!searchValue && (
-//                     <button 
-//                         className={cx("clear")} 
-//                         onClick={handleClear}
-//                     >
-//                         <FontAwesomeIcon icon={faCircleXmark} />
-//                     </button>
-//                 )}
-                
-//                 <span>|</span>
-
-//                 <button className={cx("search-btn")}>
-//                 <FontAwesomeIcon icon={faMagnifyingGlass} />
-//                 </button>
-                
-//             </div> 
-        
-//         </Tippy>
-//     );
-// }
-
-// export default Search;
-
-
-
-
-
-// ... (your imports)
 
 function Search() {
     const [searchValue, setSearchValue] = useState('');
