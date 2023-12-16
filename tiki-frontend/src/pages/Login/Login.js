@@ -59,7 +59,9 @@ const Login = () => {
   useEffect(() => {
     if (isSuccess && mutation.data.status === "OK") {
       if (location?.state) {
-        alert("Đăng nhập thành công");
+        setTimeout(() => {
+          alert("Đăng nhập thành công");
+        }, 1000);
         navigate(location.state);
       } else {
         alert("Đăng nhập thành công");

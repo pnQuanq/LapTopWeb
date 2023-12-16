@@ -436,7 +436,7 @@ const Product = () => {
           <div className={cx("modal-input")}>
             <p>Price:</p>
             <input
-              type="text"
+              type="number"
               value={stateProduct.price}
               onChange={handleOnChange}
               name="price"
@@ -445,7 +445,7 @@ const Product = () => {
           <div className={cx("modal-input")}>
             <p>countInStock:</p>
             <input
-              type="text"
+              type="number"
               value={stateProduct.countInStock}
               onChange={handleOnChange}
               name="countInStock"
@@ -454,7 +454,7 @@ const Product = () => {
           <div className={cx("modal-input")}>
             <p>Rating:</p>
             <input
-              type="text"
+              type="number"
               value={stateProduct.rating}
               onChange={handleOnChange}
               name="rating"
@@ -593,7 +593,7 @@ const Product = () => {
           <div className={cx("modal-input")}>
             <p>Price:</p>
             <input
-              type="text"
+              type="number"
               value={stateProductDetails.price}
               onChange={handleOnChangeDetails}
               name="price"
@@ -602,7 +602,7 @@ const Product = () => {
           <div className={cx("modal-input")}>
             <p>countInStock:</p>
             <input
-              type="text"
+              type="number"
               value={stateProductDetails.countInStock}
               onChange={handleOnChangeDetails}
               name="countInStock"
@@ -611,7 +611,7 @@ const Product = () => {
           <div className={cx("modal-input")}>
             <p>Rating:</p>
             <input
-              type="text"
+              type="number"
               value={stateProductDetails.rating}
               onChange={handleOnChangeDetails}
               name="rating"
