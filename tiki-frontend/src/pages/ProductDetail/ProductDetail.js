@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-
 import styles from "./ProductDetail.module.scss";
 import classNames from "classnames/bind";
 import linkien from "../../assets/images/linkien.webp";
@@ -60,22 +59,21 @@ const ProductDetail = () => {
     }
   }, [id]);
 
+  useEffect(() => {
+    const scrollToTop = async () => {
+      // Cuộn lên đầu trang
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    };
+    scrollToTop();
+  }, []);
+
   const handleBuy = async () => {
     if (!user?.id) {
       navigate("/login", { state: location.pathname });
     } else {
-      // dispatch(
-      //   addtoCart({
-      //     products: {
-      //       product: detailProduct._id,
-      //       name: detailProduct.name,
-      //       image: detailProduct.image,
-      //       price: detailProduct.price,
-      //       amount: quantity,
-      //     },
-      //   })
-      // );
-
       const cart = {
         _id: detailProduct._id,
         name: detailProduct.name,
