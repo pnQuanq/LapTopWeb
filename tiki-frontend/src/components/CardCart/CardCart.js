@@ -17,7 +17,6 @@ const CardCart = ({ props }) => {
   const dispatch = useDispatch();
   const numberFormat = new Intl.NumberFormat("en-US");
   const user = useSelector((state) => state.user);
-
   const [amount, setAmount] = useState(props?.amount);
   const [price, setPrice] = useState(props?.price * props?.amount);
   const handleChangeCount = async (type, idProduct, limited) => {
@@ -39,6 +38,7 @@ const CardCart = ({ props }) => {
       }
     }
   };
+
   const recurseIncrease = () => {
     if (user?.id) {
       UserSerVice.updateUserCart(
@@ -51,7 +51,6 @@ const CardCart = ({ props }) => {
       recurseIncrease();
     }
   };
-
   const recurseDecrease = () => {
     if (user?.id) {
       UserSerVice.updateUserCart(
@@ -65,8 +64,6 @@ const CardCart = ({ props }) => {
     }
   };
   const handleDeleteProductinCart = (id, idProduct) => {
-    console.log("id", id);
-    console.log("idproductdelete", idProduct);
     dispatch(removeCartProduct({ idProduct }));
     UserSerVice.deleteUserCart(id, idProduct, user?.access_token);
   };

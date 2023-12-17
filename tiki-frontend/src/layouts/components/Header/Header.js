@@ -15,6 +15,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { Tooltip } from "react-tippy";
 import { resetUser } from "../../../redux/slide/userSlide";
 import { resetState } from "../../../redux/slide/cartSlide";
+import logo from "../../../assets/images/lapTech_logo_3.png";
+
+import Search from "../Search";
 
 const cx = classNames.bind(styles);
 
@@ -64,19 +67,20 @@ const Header = () => {
       <div className={cx("inner")}>
         <Link className={cx("logo")} to={config.routes.home}>
           <img
-            src="https://salt.tikicdn.com/ts/upload/c1/64/f7/4e6e925ea554fc698123ea71ed7bda26.png"
-            alt="tiki-logo"
+            src= {logo}
+            alt="laptopweb-logo"
             width="72"
             height="72"
           />
         </Link>
-        <div className={cx("search")}>
+        {/* <div className={cx("search")}>
           <input placeholder="Tìm sản phẩm" spellCheck={false} />
           <span>|</span>
           <button className={cx("search-btn")}>
             <FontAwesomeIcon icon={faMagnifyingGlass} />
           </button>
-        </div>
+        </div> */}
+        <Search />
         <div className={cx("actions")}>
           <div
             className={cx("user")}
