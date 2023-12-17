@@ -30,27 +30,30 @@ const Home = () => {
       console.error("Error fetching data:", error);
     }
   };
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         //fetch all products
         const result = await fetchProductAll();
         setPData(result.data);
+        //fetch cart user
+        const userCartPromise = UserService.getUserCart(
+          user?.id,
+          user?.access_token
+        );
+        if (userCartPromise instanceof Promise) {
+          const DBData = await userCartPromise;
+          dispatch(setCartProduct(DBData));
+          console.log("user cart :", cart);
+        } else {
+          console.error("getUserCart does not return a Promise");
+        }
       } catch (error) {
         console.log("error", error);
       }
     };
     fetchData();
-  }, []);
-
-  useEffect(() => {
-    if (user?.id && user?.cart?.cartTotal) {
-      UserService.getUserCart(user?.id, user?.access_token).then((res) => {
-        dispatch(setCartProduct(res));
-      });
-    }
-  }, [user?.id]);
+  }, [user]);
 
   return (
     <div className={cx("container")}>

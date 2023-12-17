@@ -143,19 +143,6 @@ export const deleteUserCart = async (id, idProduct, access_token) => {
   return res.data;
 };
 
-export const deleteAllUserCart = async (id, access_token) => {
-  const res = await axiosJWT.delete(
-    `${process.env.REACT_APP_API_URL}/user/delete-all-cart-user/${id}`,
-
-    {
-      headers: {
-        token: `Bearer ${access_token}`,
-      },
-    }
-  );
-  return res.data;
-};
-
 export const addOrderProduct = async (id, cart, access_token) => {
   try {
     const res = await axiosJWT.put(

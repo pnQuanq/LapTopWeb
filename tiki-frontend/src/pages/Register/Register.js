@@ -84,9 +84,7 @@ const Register = () => {
 
   useEffect(() => {
     if (isSuccess && mutation.data.status === "OK") {
-      setTimeout(() => {
-        alert("Đăng ký thành công");
-      }, 1000);
+      alert("Đăng ký thành công");
       console.log(mutation.data.status);
       navigate("/login");
     } else if (isSuccess && mutation.data.status === "ERR") {
@@ -102,6 +100,7 @@ const Register = () => {
   const handleLogin = () => {
     navigate("/login");
   };
+
   return (
     <div className={cx("container")}>
       <div className={cx("inner")}>

@@ -28,33 +28,33 @@
         cursor: pointer;
     }
 }
-// .search{
-//     display: flex;
-//     flex: 10;
-//     align-items: center;
-//     justify-self: center;
-//     width: fit-content;
-//     height: 45px;
-//     padding-left: 16px;
-//     margin-right: 32px;
-//     border:#dddde3 1px solid;
-//     border-radius: 92px;
+.search{
+    display: flex;
+    flex: 10;
+    align-items: center;
+    justify-self: center;
+    width: fit-content;
+    height: 45px;
+    padding-left: 16px;
+    margin-right: 32px;
+    border:#dddde3 1px solid;
+    border-radius: 92px;
 
-//     input{
-//         flex: 1;
-//         justify-content: center;
-//         align-items: center;
-//         font-size: 1.8rem;
-//         color: #000;
-//         border: none;
-//         height: 100%;
-//         background-color: transparent;
-//         outline: none;
-//     }
-//     &:focus-within{
-//         border: 1px solid var(--primary);
-//     }
-// }
+    input{
+        flex: 1;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.8rem;
+        color: #000;
+        border: none;
+        height: 100%;
+        background-color: transparent;
+        outline: none;
+    }
+    &:focus-within{
+        border: 1px solid var(--primary);
+    }
+}
 
 .actions{
     display: flex;
@@ -110,20 +110,20 @@
 }
 
 
-// .search-btn{
-//     width: 50px;
-//     height: 100%;
-//     background-color: transparent;
-//     border: none;
-//     outline: none;
-//     border-radius: 0 18px 18px 0;
+.search-btn{
+    width: 50px;
+    height: 100%;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    border-radius: 0 18px 18px 0;
 
-//     &:hover{
-//         cursor: pointer;
-//         background-color: #dddde3;
-//     }
+    &:hover{
+        cursor: pointer;
+        background-color: #dddde3;
+    }
 
-// }
+}
 
 .account-tooltip{
     position: relative;
