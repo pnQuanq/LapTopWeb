@@ -15,6 +15,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Tooltip } from "react-tippy";
 import { resetUser } from "../../../redux/slide/userSlide";
 import { resetState } from "../../../redux/slide/cartSlide";
+import logo from "../../../assets/images/lapTech_logo_3.png";
 
 import Search from "../Search";
 
@@ -66,8 +67,8 @@ const Header = () => {
       <div className={cx("inner")}>
         <Link className={cx("logo")} to={config.routes.home}>
           <img
-            src="https://github.com/pnQuanq/LapTopWeb/blob/main/tiki-frontend/src/assets/images/lapTech_logo_3.png"
-            alt="tiki-logo"
+            src= {logo}
+            alt="laptopweb-logo"
             width="72"
             height="72"
           />
