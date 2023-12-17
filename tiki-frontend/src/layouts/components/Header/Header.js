@@ -66,7 +66,7 @@ const Header = () => {
       <div className={cx("inner")}>
         <Link className={cx("logo")} to={config.routes.home}>
           <img
-            src="https://salt.tikicdn.com/ts/upload/c1/64/f7/4e6e925ea554fc698123ea71ed7bda26.png"
+            src="https://github.com/pnQuanq/LapTopWeb/blob/main/tiki-frontend/src/assets/images/lapTech_logo_3.png"
             alt="tiki-logo"
             width="72"
             height="72"
