@@ -43,7 +43,7 @@ const CardCart = ({ props }) => {
     if (user?.id) {
       UserSerVice.updateUserCart(
         user?.id,
-        props.id,
+        props?.product,
         amount + 1,
         user?.access_token
       );
@@ -55,7 +55,7 @@ const CardCart = ({ props }) => {
     if (user?.id) {
       UserSerVice.updateUserCart(
         user?.id,
-        props.id,
+        props?.product,
         amount - 1,
         user?.access_token
       );
@@ -89,7 +89,7 @@ const CardCart = ({ props }) => {
               onClick={() =>
                 handleChangeCount(
                   "decrease",
-                  props.id,
+                  props?.product,
 
                   props?.amount === 1
                 )
@@ -100,7 +100,11 @@ const CardCart = ({ props }) => {
             <p>{amount}</p>
             <button
               onClick={() =>
-                handleChangeCount("increase", props.id, props?.amount === 50)
+                handleChangeCount(
+                  "increase",
+                  props?.product,
+                  props?.amount === 50
+                )
               }
             >
               +
@@ -112,7 +116,7 @@ const CardCart = ({ props }) => {
           <AiOutlineDelete
             size="2rem"
             color="red"
-            onClick={() => handleDeleteProductinCart(user?.id, props.id)}
+            onClick={() => handleDeleteProductinCart(user?.id, props?.product)}
           />
         </div>
       </div>

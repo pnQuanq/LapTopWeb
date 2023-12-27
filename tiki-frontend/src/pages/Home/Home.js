@@ -7,19 +7,19 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
 import CardItem from "../../components/CardItem/CardItem";
-import { useQuery } from "@tanstack/react-query";
+import * as OrderService from "../../services/OrderService";
 import * as ProductService from "../../services/ProductService";
 import * as UserService from "../../services/UserService";
 import { setCartProduct } from "../../redux/slide/cartSlide";
+import { setOrder } from "../../redux/slide/orderSlide";
 import { useDispatch, useSelector } from "react-redux";
 
 const cx = classNames.bind(styles);
 
 const Home = () => {
-  const [PData, setPData] = useState([]);
+  const [products, setProducts] = useState([]);
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
-  const cart = useSelector((state) => state.cart);
 
   const fetchProductAll = async () => {
     try {
@@ -36,7 +36,7 @@ const Home = () => {
       try {
         //fetch all products
         const result = await fetchProductAll();
-        setPData(result.data);
+        setProducts(result.data);
       } catch (error) {
         console.log("error", error);
       }
@@ -57,14 +57,41 @@ const Home = () => {
       <div className={cx("slide")}>
         <MySlider />
       </div>
-      {!PData ? null : (
+      {!products ? null : (
         <div className={cx("content")}>
           <div className={cx("content-hot-product")}>
-            <p>Sản phẩm nổi bật</p>
+            <p style={{ fontSize: "22px", color: "red" }}>Sản phẩm nổi bật</p>
             <div className={cx("items-wrapper")}>
-              <Swiper spaceBetween={10} slidesPerView={6}>
-                {PData.map((products) => (
-                  <SwiperSlide key={products.id}>
+              <Swiper
+                slidesPerView={6}
+                spaceBetween={15}
+                breakpoints={{
+                  0: {
+                    slidesPerView: 1,
+                  },
+
+                  590: {
+                    slidesPerView: 1,
+                  },
+                  840: {
+                    slidesPerView: 2,
+                  },
+                  1090: {
+                    slidesPerView: 3,
+                  },
+                  1340: {
+                    slidesPerView: 4,
+                  },
+                  1590: {
+                    slidesPerView: 5,
+                  },
+                  1840: {
+                    slidesPerView: 6,
+                  },
+                }}
+              >
+                {products.map((products) => (
+                  <SwiperSlide key={products._id}>
                     <CardItem props={products} />
                   </SwiperSlide>
                 ))}
@@ -72,24 +99,78 @@ const Home = () => {
             </div>
           </div>
           <div className={cx("content-hot-product")}>
-            <p>PC bán chạy</p>
-            <div className={cx("items-wrapper")}>
-              <Swiper spaceBetween={10} slidesPerView={6}>
-                {PData.map((item) => (
-                  <SwiperSlide key={item.id}>
-                    <CardItem props={item} />
+            <p style={{ fontSize: "22px", color: "red" }}>PC bán chạy</p>
+            <div className={cx("items-wrapper")} key="2">
+              <Swiper
+                slidesPerView={6}
+                spaceBetween={15}
+                breakpoints={{
+                  0: {
+                    slidesPerView: 1,
+                  },
+
+                  590: {
+                    slidesPerView: 1,
+                  },
+                  840: {
+                    slidesPerView: 2,
+                  },
+                  1090: {
+                    slidesPerView: 3,
+                  },
+                  1340: {
+                    slidesPerView: 4,
+                  },
+                  1590: {
+                    slidesPerView: 5,
+                  },
+                  1840: {
+                    slidesPerView: 6,
+                  },
+                }}
+              >
+                {products.map((products) => (
+                  <SwiperSlide key={products._id}>
+                    <CardItem props={products} />
                   </SwiperSlide>
                 ))}
               </Swiper>
             </div>
           </div>
           <div className={cx("content-hot-product")}>
-            <p>PC Gaming bán chạy</p>
-            <div className={cx("items-wrapper")}>
-              <Swiper spaceBetween={10} slidesPerView={6}>
-                {PData.map((item) => (
-                  <SwiperSlide key={item.id}>
-                    <CardItem props={item} />
+            <p style={{ fontSize: "22px", color: "red" }}>PC Gaming bán chạy</p>
+            <div className={cx("items-wrapper")} key="3">
+              <Swiper
+                slidesPerView={6}
+                spaceBetween={15}
+                breakpoints={{
+                  0: {
+                    slidesPerView: 1,
+                  },
+
+                  590: {
+                    slidesPerView: 1,
+                  },
+                  840: {
+                    slidesPerView: 2,
+                  },
+                  1090: {
+                    slidesPerView: 3,
+                  },
+                  1340: {
+                    slidesPerView: 4,
+                  },
+                  1590: {
+                    slidesPerView: 5,
+                  },
+                  1840: {
+                    slidesPerView: 6,
+                  },
+                }}
+              >
+                {products.map((products) => (
+                  <SwiperSlide key={products._id}>
+                    <CardItem props={products} />
                   </SwiperSlide>
                 ))}
               </Swiper>
@@ -97,11 +178,38 @@ const Home = () => {
           </div>
           <div className={cx("content-hot-product")}>
             <p>Laptop văn phòng bán chạy</p>
-            <div className={cx("items-wrapper")}>
-              <Swiper spaceBetween={10} slidesPerView={6}>
-                {PData.map((item) => (
-                  <SwiperSlide key={item.id}>
-                    <CardItem props={item} />
+            <div className={cx("items-wrapper")} key="4">
+              <Swiper
+                slidesPerView={6}
+                spaceBetween={15}
+                breakpoints={{
+                  0: {
+                    slidesPerView: 1,
+                  },
+
+                  590: {
+                    slidesPerView: 1,
+                  },
+                  840: {
+                    slidesPerView: 2,
+                  },
+                  1090: {
+                    slidesPerView: 3,
+                  },
+                  1340: {
+                    slidesPerView: 4,
+                  },
+                  1590: {
+                    slidesPerView: 5,
+                  },
+                  1840: {
+                    slidesPerView: 6,
+                  },
+                }}
+              >
+                {products.map((products) => (
+                  <SwiperSlide key={products._id}>
+                    <CardItem props={products} />
                   </SwiperSlide>
                 ))}
               </Swiper>
@@ -109,11 +217,38 @@ const Home = () => {
           </div>
           <div className={cx("content-hot-product")}>
             <p>Laptop Gaming bán chạy</p>
-            <div className={cx("items-wrapper")}>
-              <Swiper spaceBetween={10} slidesPerView={6}>
-                {PData.map((item) => (
-                  <SwiperSlide key={item.id}>
-                    <CardItem props={item} />
+            <div className={cx("items-wrapper")} key="5">
+              <Swiper
+                slidesPerView={6}
+                spaceBetween={15}
+                breakpoints={{
+                  0: {
+                    slidesPerView: 1,
+                  },
+
+                  590: {
+                    slidesPerView: 1,
+                  },
+                  840: {
+                    slidesPerView: 2,
+                  },
+                  1090: {
+                    slidesPerView: 3,
+                  },
+                  1340: {
+                    slidesPerView: 4,
+                  },
+                  1590: {
+                    slidesPerView: 5,
+                  },
+                  1840: {
+                    slidesPerView: 6,
+                  },
+                }}
+              >
+                {products.map((products) => (
+                  <SwiperSlide key={products._id}>
+                    <CardItem props={products} />
                   </SwiperSlide>
                 ))}
               </Swiper>

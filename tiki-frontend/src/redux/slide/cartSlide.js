@@ -13,7 +13,7 @@ export const cartSlide = createSlice({
     addtoCart: (state, action) => {
       const cartItem = action.payload.products;
       const alreadyExists = state?.products?.find(
-        (item) => item?.id === cartItem.product
+        (item) => item?.product === cartItem.product
       );
       if (alreadyExists) {
         alreadyExists.amount += cartItem?.amount;
@@ -25,13 +25,17 @@ export const cartSlide = createSlice({
     },
     increaseAmount: (state, action) => {
       const idProduct = action.payload;
-      const itemCart = state?.products?.find((item) => item?.id === idProduct);
+      const itemCart = state?.products?.find(
+        (item) => item?.product === idProduct
+      );
       itemCart.amount++;
       state.cartTotal += itemCart.price;
     },
     decreaseAmount: (state, action) => {
       const idProduct = action.payload;
-      const itemCart = state?.products?.find((item) => item?.id === idProduct);
+      const itemCart = state?.products?.find(
+        (item) => item?.product === idProduct
+      );
       itemCart.amount--;
       state.cartTotal -= itemCart.price;
     },
@@ -39,7 +43,7 @@ export const cartSlide = createSlice({
     //   const { idProduct } = action.payload;
 
     //   const removedProduct = state?.products?.filter(
-    //     (item) => item?.id !== idProduct
+    //     (item) => item?.product !== idProduct
     //   );
 
     //   if (removedProduct && removedProduct.length > 0) {
@@ -49,7 +53,7 @@ export const cartSlide = createSlice({
     //     console.log("Removed Product Info: ", productArray);
 
     //     state.products = state.products.filter(
-    //       (item) => item?.id !== idProduct
+    //       (item) => item?.product !== idProduct
     //     );
 
     //     // Thực hiện các hành động khác với productArray
@@ -60,11 +64,11 @@ export const cartSlide = createSlice({
     removeCartProduct: (state, action) => {
       const { idProduct } = action.payload;
       const removedProduct = state?.products?.filter(
-        (item) => item?.id === idProduct
+        (item) => item?.product === idProduct
       );
 
       const itemsCart = state?.products?.filter(
-        (item) => item?.id !== idProduct
+        (item) => item?.product !== idProduct
       );
 
       state.cartTotal -= removedProduct[0].price * removedProduct[0].amount;

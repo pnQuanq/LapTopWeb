@@ -46,7 +46,7 @@ const Laptop = () => {
   console.log("data products: ", PData);
 
   const NormalLaptopASUS = PData.filter((index) => {
-    return index.type === "normal-laptop" && index.company === "Asus";
+    return index.type === "normal-laptop" && index.company === "ASUS";
   });
 
   const NormalLaptopACER = PData.filter((index) => {

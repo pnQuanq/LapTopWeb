@@ -6,8 +6,10 @@ import "slick-carousel/slick/slick-theme.css";
 
 import styles from "./MySlider.module.scss";
 import classNames from "classnames/bind";
-import slide1 from "../../assets/images/slide1.jpg";
-import slide2 from "../../assets/images/slide2.jpg";
+import pic1 from "../../assets/images/pic1.jpg";
+import pic2 from "../../assets/images/pic2.jpg";
+import pic3 from "../../assets/images/pic3.jpg";
+import pic4 from "../../assets/images/pic4.jpg";
 
 const cx = classNames.bind(styles);
 
@@ -25,22 +27,16 @@ const MySlider = () => {
     <div className={cx("container")}>
       <Slider {...settings}>
         <div>
-          <img src={slide1} style={{ width: "100%" }} alt="img" />
+          <img src={pic1} style={{ width: "100%", height: "100%" }} alt="img" />
         </div>
         <div>
-          <img src={slide2} style={{ width: "100%" }} alt="img" />
+          <img src={pic2} style={{ width: "100%", height: "100%" }} alt="img" />
         </div>
         <div>
-          <img src={slide1} style={{ width: "100%" }} alt="img" />
+          <img src={pic3} style={{ width: "100%", height: "100%" }} alt="img" />
         </div>
         <div>
-          <img src={slide2} style={{ width: "100%" }} alt="img" />
-        </div>
-        <div>
-          <img src={slide1} style={{ width: "100%" }} alt="img" />
-        </div>
-        <div>
-          <img src={slide2} style={{ width: "100%" }} alt="img" />
+          <img src={pic4} style={{ width: "100%", height: "100%" }} alt="img" />
         </div>
       </Slider>
     </div>

@@ -39,9 +39,9 @@ const CardItem = ({ props }) => {
         />
       </div>
       <div className={cx("info")}>
-        <p className={cx("name")}>{props.name}</p>
+        <div className={cx("name")}>{props.name}</div>
         <div className={cx("rate")}>{renderRate()}</div>
-        <p className={cx("price")}> {numberFormat.format(props.price)}VNĐ </p>
+        <p className={cx("price")}> {numberFormat.format(props.price)}đ </p>
       </div>
     </div>
   );

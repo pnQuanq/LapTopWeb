@@ -7,21 +7,22 @@ import {
   faUser,
   faCartShopping,
 } from "@fortawesome/free-solid-svg-icons";
+import Search from "../Search";
 import * as UserService from "../../../services/UserService";
 import { Link, useNavigate } from "react-router-dom";
 import config from "../../../config";
 import { useSelector, useDispatch } from "react-redux";
+import lapTech_logo_3 from "../../../assets/images/lapTech_logo_3.png";
 
 import { Tooltip } from "react-tippy";
 import { resetUser } from "../../../redux/slide/userSlide";
 import { resetState } from "../../../redux/slide/cartSlide";
 
-import Search from "../Search";
-
 const cx = classNames.bind(styles);
 
 const Header = () => {
   const [visible, setVisible] = useState(false);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -61,12 +62,7 @@ const Header = () => {
     <header className={cx("wrapper")}>
       <div className={cx("inner")}>
         <Link className={cx("logo")} to={config.routes.home}>
-          <img
-            src="https://salt.tikicdn.com/ts/upload/c1/64/f7/4e6e925ea554fc698123ea71ed7bda26.png"
-            alt="tiki-logo"
-            width="72"
-            height="72"
-          />
+          <img src={lapTech_logo_3} alt="tiki-logo" width="72" height="72" />
         </Link>
         <Search />
         <div className={cx("actions")}>
