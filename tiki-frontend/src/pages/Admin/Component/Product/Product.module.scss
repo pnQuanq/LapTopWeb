@@ -9,15 +9,15 @@
     width: 150px;
     height: 150px;
     margin: 16px;
-    border: 1px dashed black;
+    border: 1px dashed #4889C7;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 64px;
     &:hover{
         cursor: pointer;
-        border: 1px dashed blue;
-        color: blue;
+        border: 1px dashed #6FC2D8;
+        color: #6FC2D8;
     }
 }
 .wrapper-button{

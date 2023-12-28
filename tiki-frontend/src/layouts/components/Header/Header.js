@@ -12,7 +12,6 @@ import * as UserService from "../../../services/UserService";
 import { Link, useNavigate } from "react-router-dom";
 import config from "../../../config";
 import { useSelector, useDispatch } from "react-redux";
-import lapTech_logo_3 from "../../../assets/images/lapTech_logo_3.png";
 
 import { Tooltip } from "react-tippy";
 import { resetUser } from "../../../redux/slide/userSlide";
@@ -128,7 +127,7 @@ const Header = () => {
               >
                 <FontAwesomeIcon
                   icon={faUser}
-                  style={{ marginRight: "16px" }}
+                  style={{ marginRight: "16px", color: '#4889C7'}}
                 />
                 {user?.name ? <div>{user?.name}</div> : <div>Tài Khoản</div>}
               </div>
@@ -160,7 +159,7 @@ const Header = () => {
               )}
               <FontAwesomeIcon
                 icon={faCartShopping}
-                style={{ marginRight: "16px" }}
+                style={{ marginRight: "16px", color: '#4889C7' }}
               />
             </div>
             <div>Đơn hàng</div>

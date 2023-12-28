@@ -99,14 +99,14 @@ const Product = () => {
         <div>
           <AiIcons.AiFillDelete
             className={cx("AiIcons")}
-            color="red"
+            color="#F6957C"
             onClick={() => {
               handleDeleteProduct(record);
             }}
           />
           <AiIcons.AiFillEdit
             className={cx("AiIcons")}
-            color="#F0E68C"
+            color="#4889C7"
             onClick={() => {
               handleDetailProduct(record);
             }}
@@ -320,7 +320,7 @@ const Product = () => {
   return (
     <div className={cx("container")}>
       <p>Quản lí sản phẩm</p>
-      <div
+      <div style={{color: '#4889C7'}}
         className={cx("add")}
         onClick={() => {
           setIsModalOpenAddProduct(true);

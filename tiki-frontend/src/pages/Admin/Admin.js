@@ -19,17 +19,17 @@ const Admin = () => {
     getItem(
       "Người dùng",
       "user",
-      <UserOutlined style={{ fontSize: "24px" }} />
+      <UserOutlined style={{ fontSize: "24px", color: '#4889C7' }} />
     ),
     getItem(
       "Sản phẩm",
       "product",
-      <AppstoreOutlined style={{ fontSize: "24px" }} />
+      <AppstoreOutlined style={{ fontSize: "24px", color: '#4889C7' }} />
     ),
     getItem(
       "Đơn hàng",
       "order",
-      <ShoppingCartOutlined style={{ fontSize: "24px" }} />
+      <ShoppingCartOutlined style={{ fontSize: "24px", color: '#4889C7' }} />
     ),
   ];
   const rootSubmenuKeys = ["user", "product", "order"];

@@ -133,7 +133,7 @@ function Search() {
         <span>|</span>
 
         <button className={cx("search-btn")}>
-          <FontAwesomeIcon icon={faMagnifyingGlass} />
+          <FontAwesomeIcon icon={faMagnifyingGlass} style={{color: '#4889C7',}} />
         </button>
       </div>
     </Tippy>
