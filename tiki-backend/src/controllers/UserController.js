@@ -288,6 +288,37 @@ const deleteProductUserCart = asyncHandler(async (req, res) => {
   }
 });
 
+const deleteAllProductInCart = asyncHandler(async (req, res) => {
+  const userId = req.params.id;
+  try {
+    if (!userId) {
+      return res.status(200).json({
+        status: "ERR",
+        message: "The userId is required",
+      });
+    }
+    try {
+      const user = await User.findById(userId);
+      const existingCart = await Cart.findOne({ orderby: user._id });
+      existingCart.products = [];
+      existingCart.cartTotal = 0;
+      await existingCart.save();
+      return res.status(200).json({
+        status: "OK",
+        message: "Delete all product in cart success",
+      });
+    } catch (e) {
+      return res.status(404).json({
+        message: e,
+      });
+    }
+  } catch (e) {
+    return res.status(404).json({
+      message: e,
+    });
+  }
+});
+
 const deleteUser = async (req, res) => {
   try {
     const userId = req.params.id;
@@ -393,6 +424,7 @@ module.exports = {
   getUserCart,
   updateUserCart,
   deleteProductUserCart,
+  deleteAllProductInCart,
   deleteUser,
   getAllUser,
   getDetailsUser,

@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./ProductDetail.module.scss";
 import classNames from "classnames/bind";
-import linkien from "../../assets/images/linkien.webp";
 import { AiFillStar } from "react-icons/ai";
-
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -12,18 +10,16 @@ import CardItem from "../../components/CardItem/CardItem";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import * as ProductService from "../../services/ProductService";
 import * as UserService from "../../services/UserService";
-import Data from "../../Data/Data";
 import { useDispatch, useSelector } from "react-redux";
 import { addtoCart } from "../../redux/slide/cartSlide";
 import { useMutationHook } from "../../hooks/useMutationHook";
-
 const cx = classNames.bind(styles);
 
 const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [detailProduct, setDetailProduct] = useState({});
+  const [recommendedProducts, setRecommendedProducts] = useState([]);
   const user = useSelector((state) => state.user);
-  const cart = useSelector((state) => state.cart);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
@@ -33,7 +29,6 @@ const ProductDetail = () => {
   );
 
   const numberFormat = new Intl.NumberFormat("en-US");
-
   const handleDown = () => {
     if (quantity > 1) {
       setQuantity(quantity - 1);
@@ -105,6 +100,29 @@ const ProductDetail = () => {
     }
   };
 
+  const fetchProductAll = async () => {
+    try {
+      const res = await ProductService.getAllProduct();
+      console.log("Data fetched:", res);
+      return res;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        //fetch all products
+        const result = await fetchProductAll();
+        setRecommendedProducts(result.data);
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+    fetchData();
+  }, []);
+  console.log("recommendedProducts", recommendedProducts);
+
   return (
     <div className={cx("container")}>
       <div className={cx("container-content")}>
@@ -113,11 +131,11 @@ const ProductDetail = () => {
             <img src={detailProduct.image} alt="linkien" />
           </div>
           <div className={cx("list-image")}>
-            <img src={linkien} alt="linkien" />
-            <img src={linkien} alt="linkien" />
-            <img src={linkien} alt="linkien" />
-            <img src={linkien} alt="linkien" />
-            <img src={linkien} alt="linkien" />
+            <img src={detailProduct.image} alt="detailProduct1" />
+            <img src={detailProduct.image} alt="detailProduct2" />
+            <img src={detailProduct.image} alt="detailProduct3" />
+            <img src={detailProduct.image} alt="detailProduct4" />
+            <img src={detailProduct.image} alt="detailProduct5" />
           </div>
         </div>
         <div className={cx("container-info")}>
@@ -126,8 +144,14 @@ const ProductDetail = () => {
               <p>{detailProduct.name}</p>
             </div>
             <div className={cx("rate")}>
-              <p style={{ display: "flex", alignItems: "center" }}>
-                <div style={{ display: "flex", alignItems: "center" }}>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    marginLeft: "8px",
+                  }}
+                >
                   <AiFillStar color="yellow" size="2rem" />
                   <AiFillStar color="yellow" size="2rem" />
                   <AiFillStar color="yellow" size="2rem" />
@@ -136,7 +160,7 @@ const ProductDetail = () => {
                 </div>
 
                 <span style={{ marginLeft: "8px" }}>0 đánh giá</span>
-              </p>
+              </div>
             </div>
             <div className={cx("price")}>
               <p>{numberFormat.format(detailProduct.price)} VNĐ</p>
@@ -192,9 +216,36 @@ const ProductDetail = () => {
       <div className={cx("another-product")}>
         <p>Sản phẩm bạn có thể quan tâm</p>
         <div className={cx("items-wrapper")}>
-          <Swiper spaceBetween={10} slidesPerView={8}>
-            {Data.map((item) => (
-              <SwiperSlide key={item.id}>
+          <Swiper
+            slidesPerView={6}
+            spaceBetween={15}
+            breakpoints={{
+              0: {
+                slidesPerView: 1,
+              },
+
+              200: {
+                slidesPerView: 1,
+              },
+              600: {
+                slidesPerView: 2,
+              },
+              800: {
+                slidesPerView: 3,
+              },
+              1100: {
+                slidesPerView: 4,
+              },
+              1500: {
+                slidesPerView: 5,
+              },
+              1800: {
+                slidesPerView: 6,
+              },
+            }}
+          >
+            {recommendedProducts.map((item) => (
+              <SwiperSlide key={item._id}>
                 <CardItem props={item} />
               </SwiperSlide>
             ))}

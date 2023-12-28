@@ -178,7 +178,7 @@ const Register = () => {
                     isFocusedConfirmPass || isValidConfirmPass ? "0" : "24px",
                 }}
               >
-                Re-enter Password
+                Password
               </label>
             </div>
             <button onClick={handleRegister}>Register</button>

@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from "react";
 import styles from "./User.module.scss";
 import classNames from "classnames/bind";
-import * as ProductService from "../../../../services/ProductService";
 import * as UserService from "../../../../services/UserService";
-import { useMutationHook } from "../../../../hooks/useMutationHook";
 import * as AiIcons from "react-icons/ai";
-import { getBase64 } from "../../../../utils";
+
 import { Modal, Table } from "antd";
-import { Upload } from "antd";
-import useSelection from "antd/es/table/hooks/useSelection";
 
 const cx = classNames.bind(styles);
 
@@ -58,7 +54,7 @@ const Product = () => {
   const fetchUserAll = async () => {
     try {
       const res = await UserService.getAllUser();
-      console.log("Data fetched all product:", res);
+      console.log("Data fetched all user:", res);
       return res;
     } catch (error) {
       console.error("Error fetching data:", error);

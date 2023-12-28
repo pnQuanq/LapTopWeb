@@ -61,8 +61,8 @@ const Login = () => {
       if (location?.state) {
         setTimeout(() => {
           alert("Đăng nhập thành công");
+          navigate(location.state);
         }, 1000);
-        navigate(location.state);
       } else {
         alert("Đăng nhập thành công");
         navigate("/");

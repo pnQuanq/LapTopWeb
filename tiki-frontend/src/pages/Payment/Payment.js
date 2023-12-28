@@ -83,7 +83,7 @@ const Payment = () => {
       alert("Đặt hàng thành công");
       dispatch(resetState());
       UserService.deleteAllUserCart(user?.id, user?.access_token);
-      navigate("/");
+      navigate("/ordersuccess");
     }
   }, [isSuccess]);
 

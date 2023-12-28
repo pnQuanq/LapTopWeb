@@ -7,23 +7,22 @@ import {
   faUser,
   faCartShopping,
 } from "@fortawesome/free-solid-svg-icons";
+import Search from "../Search";
 import * as UserService from "../../../services/UserService";
 import { Link, useNavigate } from "react-router-dom";
 import config from "../../../config";
 import { useSelector, useDispatch } from "react-redux";
+import lapTech_logo_3 from "../../../assets/images/lapTech_logo_3.png";
 
 import { Tooltip } from "react-tippy";
 import { resetUser } from "../../../redux/slide/userSlide";
 import { resetState } from "../../../redux/slide/cartSlide";
 import logo from "../../../assets/images/lapTech_logo_3.png";
 
-import Search from "../Search";
-
 const cx = classNames.bind(styles);
 
 const Header = () => {
   const [visible, setVisible] = useState(false);
-  console.log("visible: ", visible, typeof visible);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -60,8 +59,6 @@ const Header = () => {
     navigate("/");
   };
 
-  console.log("user: ", user);
-
   return (
     <header className={cx("wrapper")}>
       <div className={cx("inner")}>
@@ -73,13 +70,6 @@ const Header = () => {
             height="72"
           />
         </Link>
-        {/* <div className={cx("search")}>
-          <input placeholder="Tìm sản phẩm" spellCheck={false} />
-          <span>|</span>
-          <button className={cx("search-btn")}>
-            <FontAwesomeIcon icon={faMagnifyingGlass} />
-          </button>
-        </div> */}
         <Search />
         <div className={cx("actions")}>
           <div

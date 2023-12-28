@@ -41,6 +41,7 @@ const Product = () => {
     image: "",
   });
   const user = useSelection((state) => state?.user);
+  const numberFormat = new Intl.NumberFormat("en-US");
 
   const mutation = useMutationHook((data) =>
     ProductService.createProduct(data)
@@ -78,6 +79,7 @@ const Product = () => {
     {
       title: "Price",
       dataIndex: "price",
+      render: (price) => <div>{numberFormat.format(price)}đ</div>,
     },
     {
       title: "CountInStock",
@@ -186,7 +188,6 @@ const Product = () => {
     };
 
     fetchData();
-    console.log("Data:", Data);
   }, []);
 
   useEffect(() => {

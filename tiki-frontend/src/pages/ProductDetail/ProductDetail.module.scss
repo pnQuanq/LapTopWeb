@@ -199,5 +199,10 @@
     height: 80px;
     margin: 0 8px;
     cursor: pointer;
+    &:hover{
+        transition: 0.5s;
+        background-color: #ff572d;
+    }
+
 
 }
