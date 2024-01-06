@@ -30,5 +30,5 @@ npm run start
 + [Trần Quang Khải](https://github.com/TranQuangKhai288)
 + [Phạm Nhật Quang](https://github.com/pnQuanq)
 + [Trần Quang Tiến](https://github.com/Jackesque)
-+ Trần Lương
++ [Trần Lương](https://github.com/Luong26)
 + [Ngô Vũ Đức Duy](https://github.com/duyngo0605)
