@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./Product.module.scss";
 import classNames from "classnames/bind";
 import * as ProductService from "../../../../services/ProductService";
@@ -155,6 +155,10 @@ const Product = () => {
       name: "ACER",
     },
   ];
+
+  const [descrRowsCount, setDescrRowsCount] = useState(4);
+  const descrTextareaRef = useRef();
+  const [descrHeightAuto, setDescrHeightAuto] = useState(true);
 
   const { isError, isSuccess } = mutation;
   const {
@@ -462,16 +466,25 @@ const Product = () => {
             />
           </div>
           <div className={cx("modal-input")}>
-            <p>Description</p>
-            <input
-              type="text"
+            <p>Description:</p>
+            <textarea
+              rows={descrRowsCount}
               value={stateProduct.description}
               onChange={handleOnChange}
               name="description"
-            />
+              style={{width: '300px', padding: '0.8rem', fontFamily: 'Arial', fontSize: '1.6rem', resize: 'vertical', height: descrHeightAuto?'auto':'0'}}
+              ref={descrTextareaRef}
+              onKeyDown={(e) => {
+                if (descrTextareaRef.current.value.length !== 0 && (e.key === 'Backspace' || e.key === 'Delete')) setDescrHeightAuto(false);
+              }}
+              onInput={() => {
+                setDescrRowsCount(Math.max(4, Math.floor(descrTextareaRef.current.scrollHeight/18)));
+                setDescrHeightAuto(true);
+              }}
+              ></textarea>
           </div>
           <div className={cx("modal-input")}>
-            <p>Image</p>
+            <p>Image:</p>
             <Upload onChange={handleOnChangeImage}>
               {stateProduct.image ? (
                 <img
