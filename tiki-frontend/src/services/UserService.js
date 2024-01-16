@@ -72,6 +72,7 @@ export const logoutUser = async () => {
 };
 
 export const updateUser = async (id, data, access_token) => {
+  console.log("data", data);
   const res = await axiosJWT.post(
     `${process.env.REACT_APP_API_URL}/user/update-user/${id}`,
     data,

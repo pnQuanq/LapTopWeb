@@ -15,7 +15,8 @@ const Product = () => {
   const [isModalOpenAddProduct, setIsModalOpenAddProduct] = useState(false);
   const [rowSelected, setRowSelected] = useState("");
   const [isModalOpenEditProduct, setIsModalOpenEditProduct] = useState(false);
-
+  const [newType, setNewType] = useState("");
+  const [newCompany, setNewCompany] = useState("");
   const [isDropdownType, setIsDropdownType] = useState(false);
   const [isDropdownCompany, setIsDropdownCompany] = useState(false);
   const [Data, setData] = useState([]);
@@ -97,14 +98,14 @@ const Product = () => {
       title: "Action",
       render: (text, record) => (
         <div>
-          <AiIcons.AiFillDelete
+          <AiIcons.AiOutlineDelete
             className={cx("AiIcons")}
             color="red"
             onClick={() => {
               handleDeleteProduct(record);
             }}
           />
-          <AiIcons.AiFillEdit
+          <AiIcons.AiOutlineEdit
             className={cx("AiIcons")}
             color="#F0E68C"
             onClick={() => {
@@ -115,7 +116,7 @@ const Product = () => {
       ),
     },
   ];
-  const listType = [
+  const [listType, setListType] = useState([
     {
       id: 1,
       name: "normal-laptop",
@@ -132,8 +133,9 @@ const Product = () => {
       id: 3,
       name: "gaming-PC",
     },
-  ];
-  const listCompany = [
+  ]);
+
+  const [listCompany, setListCompany] = useState([
     {
       id: 1,
       name: "ASUS",
@@ -154,7 +156,7 @@ const Product = () => {
       id: 3,
       name: "ACER",
     },
-  ];
+  ]);
 
   const { isError, isSuccess } = mutation;
   const {
@@ -197,13 +199,18 @@ const Product = () => {
       window.location.reload();
     } else if (isError) {
       alert(mutation.data);
-      console.log("ERR mutation.data:", mutation.data);
-      console.log("ERR mutationERR:", mutation.error);
+    } else if (
+      isSuccess &&
+      mutation.data.message === "Tên sản phẩm đã tồn tại"
+    ) {
+      alert("Mã sản phẩm đã tồn tại");
     }
   }, [isSuccess, isError]);
 
   const handleOkAddProduct = () => {
+    console.log("stateProduct", stateProduct);
     mutation.mutate(stateProduct);
+
     setIsModalOpenAddProduct(false);
   };
   const handleCancelAddProduct = () => {
@@ -317,6 +324,38 @@ const Product = () => {
     }
   }, [dataDeleted]);
 
+  useEffect(() => {
+    if (newType) {
+      // Update the list of types with the new type
+      setListType((prevList) => [
+        ...prevList,
+        { id: prevList.length + 1, name: newType },
+      ]);
+
+      // Select the new type
+      setStateProduct({
+        ...stateProduct,
+        type: newType,
+      });
+    }
+  }, [newType]);
+
+  useEffect(() => {
+    if (newCompany) {
+      // Update the list of companies with the new company
+      setListCompany((prevList) => [
+        ...prevList,
+        { id: prevList.length + 1, name: newCompany },
+      ]);
+
+      // Select the new company
+      setStateProduct({
+        ...stateProduct,
+        company: newCompany,
+      });
+    }
+  }, [newCompany]);
+
   return (
     <div className={cx("container")}>
       <p>Quản lí sản phẩm</p>
@@ -384,8 +423,8 @@ const Product = () => {
               <div className={cx("dropdown")}>
                 {listType.map((item, i) => (
                   <div
-                    key={item.id}
                     className={cx("dropdownitem")}
+                    key={item.id}
                     onClick={() => {
                       setIsDropdownType(!isDropdownType);
                       setStateProduct({
@@ -397,6 +436,16 @@ const Product = () => {
                     <p>{item.name}</p>
                   </div>
                 ))}
+                {/* Add option to add a new Type */}
+                <div
+                  className={cx("dropdownitem")}
+                  onClick={() => {
+                    setIsDropdownType(!isDropdownType);
+                    setNewType(prompt("Enter a new Type:"));
+                  }}
+                >
+                  <p>Add New Type</p>
+                </div>
               </div>
             </div>
           ) : null}
@@ -418,8 +467,8 @@ const Product = () => {
               <div className={cx("dropdown")}>
                 {listCompany.map((item, i) => (
                   <div
-                    key={item.id}
                     className={cx("dropdownitem")}
+                    key={item.id}
                     onClick={() => {
                       setIsDropdownCompany(!isDropdownCompany);
                       setStateProduct({
@@ -431,6 +480,16 @@ const Product = () => {
                     <p>{item.name}</p>
                   </div>
                 ))}
+                {/* Add option to add a new Company */}
+                <div
+                  className={cx("dropdownitem")}
+                  onClick={() => {
+                    setIsDropdownCompany(!isDropdownCompany);
+                    setNewCompany(prompt("Enter a new Company:"));
+                  }}
+                >
+                  <p>Add New Company</p>
+                </div>
               </div>
             </div>
           ) : null}

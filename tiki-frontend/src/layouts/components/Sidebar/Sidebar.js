@@ -17,42 +17,42 @@ const Sidebar = () => {
         <MenuItem
           title="Laptop"
           to={config.routes.laptop}
-          icon={<AiOutlineLaptop size="32px" />}
+          icon={<AiOutlineLaptop size="32px" color="#60a4d1" />}
         />
         <MenuItem
           title="Laptop Gaming"
           to={config.routes.laptopgaming}
-          icon={<SiYoutubegaming size="32px" />}
+          icon={<SiYoutubegaming size="32px" color="#60a4d1" />}
         />
         <MenuItem
           title="PC Gaming"
           to={config.routes.pcgaming}
-          icon={<FaComputer size="32px" />}
+          icon={<FaComputer size="32px" color="#60a4d1" />}
         />
         <MenuItem
           title="PC làm việc"
           to={config.routes.pclamviec}
-          icon={<FaComputer size="32px" />}
+          icon={<FaComputer size="32px" color="#60a4d1" />}
         />
         <MenuItem
           title="Linh kiện PC"
           to={config.routes.linhkienpc}
-          icon={<BsCpu size="32px" />}
+          icon={<BsCpu size="32px" color="#60a4d1" />}
         />
         <MenuItem
           title="Màn hình"
           to={config.routes.manhinh}
-          icon={<FaDisplay size="32px" />}
+          icon={<FaDisplay size="32px" color="#60a4d1" />}
         />
         <MenuItem
           title="Tai Nghe - Loa"
           to={config.routes.tainghevloa}
-          icon={<FaHeadphonesSimple size="32px" />}
+          icon={<FaHeadphonesSimple size="32px" color="#60a4d1" />}
         />
         <MenuItem
           title="Phụ kiện"
           to={config.routes.phukien}
-          icon={<BsController size="32px" />}
+          icon={<BsController size="32px" color="#60a4d1" />}
         />
       </Menu>
     </aside>

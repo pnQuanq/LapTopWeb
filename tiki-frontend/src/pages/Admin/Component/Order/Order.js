@@ -76,7 +76,7 @@ const Order = () => {
       dataIndex: "itemsPrice",
       render: (itemsPrice) => (
         <p style={{ fontWeight: "500", fontSize: "16px" }}>
-          {numberFormat.format(itemsPrice)} đ
+          {numberFormat.format(itemsPrice)}đ
         </p>
       ),
     },
@@ -86,7 +86,7 @@ const Order = () => {
       dataIndex: "shippingPrice",
       render: (shippingPrice) => (
         <p style={{ fontWeight: "500", fontSize: "16px" }}>
-          {numberFormat.format(shippingPrice)} đ
+          {numberFormat.format(shippingPrice)}đ
         </p>
       ),
     },
@@ -96,7 +96,7 @@ const Order = () => {
       dataIndex: "totalPrice",
       render: (totalPrice) => (
         <p style={{ fontWeight: "500", fontSize: "16px" }}>
-          {numberFormat.format(totalPrice)} đ
+          {numberFormat.format(totalPrice)}đ
         </p>
       ),
     },
@@ -133,8 +133,8 @@ const Order = () => {
       title: "Action",
       render: (text, record) => (
         <div>
-          <AiIcons.AiFillDelete className={cx("AiIcons")} color="red" />
-          <AiIcons.AiFillEdit className={cx("AiIcons")} color="#F0E68C" />
+          <AiIcons.AiOutlineDelete className={cx("AiIcons")} color="red" />
+          <AiIcons.AiOutlineEdit className={cx("AiIcons")} color="#F0E68C" />
         </div>
       ),
     },

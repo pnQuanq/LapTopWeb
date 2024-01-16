@@ -53,7 +53,7 @@ const Home = () => {
   }, [user?.id]);
 
   return (
-    <div className={cx("container")}>
+    <div>
       <div className={cx("slide")}>
         <MySlider />
       </div>

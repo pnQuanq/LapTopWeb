@@ -1,11 +1,29 @@
-.wrapper {
+.tet {
     display: flex;
     position: relative;
     flex-direction: column;
     align-items: center;
-
+    background-image: url("../../assets/images/background-tet-2023-12.jpg");
+}
+.light {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fff6ed;
 }
 
+.icon-tet{
+    position: fixed;
+    top: 50%;
+    right: 0;
+    width: 80px;
+    height: 80px;
+    background-image: url("../../assets/images/dragon.png") ;
+    background-size: cover;
+    z-index: 1000;
+    border-radius: 50%;
+}
 
 .container-content {
     display: flex;

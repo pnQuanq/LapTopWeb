@@ -25,9 +25,17 @@
         border: 1px solid var(--primary);
     }
 }
+.search-line{
+    display: flex;
+    flex: 10;
+
+}
 .search-result{
+    margin-top: 8px;
+    background-color: #fff;
     width: 830px;
-    height: fit-content;
+    height: 400px;
+    overflow: scroll;
     .search-title{
         margin-left: 10px;
     }
@@ -84,6 +92,10 @@
 .info{
     flex: 1;
     margin-left: 12px;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
 }
 
 .name{

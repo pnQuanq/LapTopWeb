@@ -5,18 +5,11 @@ import {
   faMagnifyingGlass,
   faCircleXmark,
 } from "@fortawesome/free-solid-svg-icons";
-import Tippy from "@tippyjs/react/headless";
+import HeadlessTippy from "@tippyjs/react/headless";
 import { Wrapper as PopperWrapper } from "../../../components/Popper";
 import "tippy.js/dist/tippy.css";
-//import AccountItem from "../AccountItem";
 import classNames from "classnames/bind";
 import styles from "./Search.module.scss";
-import { useDebounce } from "../../../hooks";
-
-//import { search } from "../../../apiServices/searchService";
-//import Data from "../../../Data/Data";
-
-//import * as searchService from "../../../apiServices/searchService";
 import * as ProductService from "../../../services/ProductService";
 import { useNavigate } from "react-router-dom";
 
@@ -27,8 +20,7 @@ function Search() {
   const [searchResult, setSearchResult] = useState([]);
   const [showResult, setShowResult] = useState(true);
 
-  const debounced = useDebounce(searchValue, 500);
-
+  const numberFormat = new Intl.NumberFormat("en-US");
   const inputRef = useRef();
 
   // Fetch all products
@@ -90,53 +82,57 @@ function Search() {
     setShowResult(false);
   };
   return (
-    <Tippy
-      interactive
-      visible={showResult && searchResult.length > 0}
-      render={(attrs) => (
-        <div className={cx("search-result")} tabIndex="-1" {...attrs}>
-          <PopperWrapper>
-            <h4 className={cx("search-title")}>Products</h4>
+    <div className={cx("search-line")}>
+      <HeadlessTippy
+        interactive
+        visible={showResult && searchResult.length > 0}
+        render={(attrs) => (
+          <div className={cx("search-result")} tabIndex="-1" {...attrs}>
             {searchResult.map((result) => (
               <div
+                key={result._id}
                 className={cx("wrapper")}
                 onClick={() => handleDetailProduct(result._id)}
               >
-                <FontAwesomeIcon icon={faMagnifyingGlass} key={result._id} />
                 <div className={cx("info")}>
-                  <h4 className={cx("name")}>
-                    <span>{result.name}</span>
-                  </h4>
+                  <img src={result.image} alt={result.name} width={"100px"} />
+                  <div>
+                    <p>{result.name}</p>
+                    <p style={{ color: "red" }}>
+                      {" "}
+                      {numberFormat.format(result.price)}Đ
+                    </p>
+                  </div>
                 </div>
               </div>
             ))}
-          </PopperWrapper>
-        </div>
-      )}
-      onClickOutside={handleHideResult}
-    >
-      <div className={cx("search")}>
-        <input
-          ref={inputRef}
-          value={searchValue}
-          placeholder="Tìm sản phẩm"
-          spellCheck={false}
-          onChange={handleInputChange}
-          onFocus={() => setShowResult(true)}
-        />
-        {!!searchValue && (
-          <button className={cx("clear")} onClick={handleClear}>
-            <FontAwesomeIcon icon={faCircleXmark} />
-          </button>
+          </div>
         )}
+        onClickOutside={handleHideResult}
+      >
+        <div className={cx("search")}>
+          <input
+            ref={inputRef}
+            value={searchValue}
+            placeholder="Tìm sản phẩm"
+            spellCheck={false}
+            onChange={handleInputChange}
+            onFocus={() => setShowResult(true)}
+          />
+          {!!searchValue && (
+            <button className={cx("clear")} onClick={handleClear}>
+              <FontAwesomeIcon icon={faCircleXmark} />
+            </button>
+          )}
 
-        <span>|</span>
+          <span>|</span>
 
-        <button className={cx("search-btn")}>
-          <FontAwesomeIcon icon={faMagnifyingGlass} />
-        </button>
-      </div>
-    </Tippy>
+          <button className={cx("search-btn")}>
+            <FontAwesomeIcon icon={faMagnifyingGlass} />
+          </button>
+        </div>
+      </HeadlessTippy>
+    </div>
   );
 }
 

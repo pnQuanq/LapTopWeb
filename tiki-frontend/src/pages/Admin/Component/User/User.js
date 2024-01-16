@@ -43,8 +43,8 @@ const Product = () => {
       title: "Action",
       render: (text, record) => (
         <div>
-          <AiIcons.AiFillDelete className={cx("AiIcons")} color="red" />
-          <AiIcons.AiFillEdit className={cx("AiIcons")} color="#F0E68C" />
+          <AiIcons.AiOutlineDelete className={cx("AiIcons")} color="red" />
+          <AiIcons.AiOutlineEdit className={cx("AiIcons")} color="#F0E68C" />
         </div>
       ),
     },
